@@ -20,7 +20,6 @@
       display: flex;
       flex-direction: column;
     }
-    /* Background avatar image with brightness filter */
     #background-avatar {
       position: fixed;
       top: 0;
@@ -33,7 +32,6 @@
       user-select: none;
       pointer-events: none;
     }
-    /* Chat panel styling */
     #chat-panel {
       display: flex;
       flex-direction: column;
@@ -72,7 +70,6 @@
       background-color: rgba(255 255 255 / 0.3);
       border-radius: 4px;
     }
-    /* Input form fixed at bottom */
     #input-form {
       position: fixed;
       bottom: 0;
@@ -109,7 +106,6 @@
       outline: none;
       background: rgba(255 255 255 / 0.1);
     }
-    /* Buttons */
     #send-btn,
     #video-talk-btn {
       background: transparent;
@@ -132,7 +128,6 @@
       outline: none;
       box-shadow: 0 0 0 3px #007a9a;
     }
-    /* Deep Contents Button */
     #deep-contents-btn {
       position: fixed;
       bottom: 5rem;
@@ -160,7 +155,6 @@
       outline: none;
       box-shadow: 0 0 0 4px #007a9a;
     }
-    /* Deep Contents Panel */
     dialog#deep-contents-panel {
       border: none;
       padding: 0;
@@ -221,7 +215,6 @@
       outline: none;
       box-shadow: 0 0 0 3px #00a8cc;
     }
-    /* Tabs navigation */
     nav[aria-label="Deep Contents Tabs"] {
       display: flex;
       border-bottom: 1px solid #007a9a;
@@ -256,7 +249,6 @@
       outline: none;
       box-shadow: 0 0 0 3px #00a8cc;
     }
-    /* Tabs content */
     .tab-panel {
       flex-grow: 1;
       overflow-y: auto;
@@ -267,7 +259,6 @@
     .tab-panel.hidden {
       display: none;
     }
-    /* Pill reminder form */
     #pill-reminder-form input,
     #pill-reminder-form textarea {
       width: 100%;
@@ -309,7 +300,6 @@
       box-shadow: 0 0 0 3px #007a9a;
       color: white;
     }
-    /* Pill reminder list */
     #pill-reminder-list > div {
       border: 1px solid #00a8cc;
       background-color: rgba(0, 168, 204, 0.15);
@@ -349,7 +339,6 @@
       outline: none;
       box-shadow: 0 0 0 2px rgba(185, 28, 28, 0.5);
     }
-    /* Pharmacy and hospital results */
     #pharmacy-results > div,
     #hospital-results > div {
       border: 1px solid #00a8cc;
@@ -359,6 +348,12 @@
       margin-bottom: 0.75rem;
       color: white;
       font-family: "Montserrat", sans-serif;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    #pharmacy-results > div:hover,
+    #hospital-results > div:hover {
+      background-color: rgba(0, 168, 204, 0.3);
     }
     #pharmacy-results h4,
     #hospital-results h4 {
@@ -385,6 +380,49 @@
       outline: none;
       text-decoration: underline;
     }
+    .details-panel {
+      background-color: rgba(0, 168, 204, 0.2);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      color: #a0e9ff;
+      font-family: "Montserrat", sans-serif;
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .details-panel.visible {
+      display: flex;
+    }
+    .details-panel img {
+      max-width: 100%;
+      border-radius: 0.5rem;
+      object-fit: cover;
+      max-height: 200px;
+      margin-bottom: 0.5rem;
+      user-select: none;
+      pointer-events: none;
+    }
+    .more-btn {
+      background: transparent;
+      border: none;
+      color: #00a8cc;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.875rem;
+      transition: color 0.2s ease;
+      align-self: flex-start;
+    }
+    .more-btn:hover,
+    .more-btn:focus {
+      color: #007a9a;
+      outline: none;
+      text-decoration: underline;
+    }
     /* Avatar container */
     #avatar-container {
       flex-grow: 1;
@@ -397,7 +435,6 @@
       transition: width 0.5s ease-in-out;
       user-select: none;
     }
-    /* Avatar image */
     #avatar-image {
       width: 100%;
       height: 100%;
@@ -405,13 +442,11 @@
       border-radius: 0.5rem;
       user-select: none;
       pointer-events: none;
-      /* Removed animations */
       transform-origin: center bottom;
       position: relative;
       z-index: 10;
       filter: drop-shadow(0 0 4px rgba(0, 168, 204, 0.7));
     }
-    /* Static avatar behind for smoothness */
     #avatar-static {
       position: absolute;
       top: 0;
@@ -427,7 +462,6 @@
       transition: opacity 0.3s ease;
       filter: drop-shadow(0 0 4px rgba(0, 168, 204, 0.5));
     }
-    /* Audio wave for live talk */
     #audio-wave {
       position: absolute;
       bottom: 3.5rem;
@@ -463,7 +497,6 @@
       height: 1.25rem;
       animation-delay: 0s, 0.3s;
     }
-    /* Animations */
     @keyframes pulse {
       0%, 100% {
         opacity: 0.3;
@@ -474,7 +507,6 @@
         transform: scaleY(1.8);
       }
     }
-    /* Responsive adjustments */
     @media (max-width: 768px) {
       #chat-panel {
         width: 100vw;
@@ -495,60 +527,66 @@
   </style>
  </head>
  <body>
-  <img alt="Cheerful darkskinned girl smiling broadly with natural hair, representing Dr Eliane AI assistant" id="background-avatar" src="https://www.shutterstock.com/image-photo/cheerful-darkskinned-girl-smiling-broadly-600nw-635442125.jpg"/>
+  <img alt="Cheerful darkskinned girl smiling broadly with natural hair, representing Dr Eliane AI assistant" height="1080" id="background-avatar" src="https://storage.googleapis.com/a1aa/image/d0cbd805-00eb-485e-c299-e56a9b098a42.jpg" width="1920"/>
   <div class="relative w-screen h-screen flex flex-col overflow-hidden" id="app">
-   <!-- Main container -->
    <main aria-label="Dr Eliane AI Assistant main interface" class="flex flex-row w-full h-full transition-all duration-500 ease-in-out" id="main-container" style="width: 100vw; height: 100vh;">
-    <!-- Chat panel -->
-    <section aria-label="Chat panel with Dr Eliane" class="hidden" id="chat-panel" role="region" aria-live="polite" aria-atomic="false">
+    <section aria-atomic="false" aria-label="Chat panel with Dr Eliane" aria-live="polite" class="hidden" id="chat-panel" role="region">
      <header class="flex items-center justify-between px-4 py-3 border-b border-white/30 bg-transparent">
       <h2 class="text-lg font-bold text-white tracking-widest select-none">
        Chat with Dr Eliane
       </h2>
       <button aria-label="Close chat panel" class="text-white hover:text-[#00a8cc] focus:outline-none" id="close-chat" type="button">
-       <i class="fas fa-times fa-lg"></i>
+       <i class="fas fa-times fa-lg">
+       </i>
       </button>
      </header>
-     <div class="flex flex-col space-y-4 px-4 py-3 overflow-y-auto" id="chat-messages" role="log" tabindex="0" style="color: white;">
+     <div class="flex flex-col space-y-4 px-4 py-3 overflow-y-auto" id="chat-messages" role="log" style="color: white;" tabindex="0">
      </div>
     </section>
-    <!-- Avatar container -->
-    <section aria-label="Dr Eliane AI Avatar" id="avatar-container" class="select-none">
-     <img alt="Portrait of a cheerful dark-skinned young woman smiling broadly, wearing casual clothes, representing Dr Eliane AI assistant" draggable="false" height="800" id="avatar-image" src="https://www.shutterstock.com/image-photo/cheerful-darkskinned-girl-smiling-broadly-600nw-635442125.jpg" width="600" decoding="async" loading="eager"/>
-     <img alt="Portrait of a cheerful dark-skinned young woman smiling broadly, wearing casual clothes, representing Dr Eliane AI assistant" class="absolute top-0 left-0 w-full h-full object-contain rounded-lg pointer-events-none" draggable="false" id="avatar-static" src="https://www.shutterstock.com/image-photo/cheerful-darkskinned-girl-smiling-broadly-600nw-635442125.jpg" style="user-select:none;" decoding="async" loading="eager"/>
-     <div aria-hidden="true" id="audio-wave" class="hidden">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
+    <section aria-label="Dr Eliane AI Avatar" class="select-none" id="avatar-container">
+     <img alt="Portrait of a cheerful dark-skinned young woman smiling broadly, wearing casual clothes, representing Dr Eliane AI assistant" decoding="async" draggable="false" height="800" id="avatar-image" loading="eager" src="https://storage.googleapis.com/a1aa/image/16b56b2a-c2dd-431b-6642-15bdcc2d3a38.jpg" width="600"/>
+     <img alt="Portrait of a cheerful dark-skinned young woman smiling broadly, wearing casual clothes, representing Dr Eliane AI assistant" class="absolute top-0 left-0 w-full h-full object-contain rounded-lg pointer-events-none" decoding="async" draggable="false" height="800" id="avatar-static" loading="eager" src="https://storage.googleapis.com/a1aa/image/16b56b2a-c2dd-431b-6642-15bdcc2d3a38.jpg" style="user-select:none;" width="600"/>
+     <div aria-hidden="true" class="hidden" id="audio-wave">
+      <span>
+      </span>
+      <span>
+      </span>
+      <span>
+      </span>
+      <span>
+      </span>
+      <span>
+      </span>
      </div>
     </section>
    </main>
-   <!-- Input and controls fixed at bottom -->
-   <form aria-label="User input form" id="input-form" role="search" class="flex items-center gap-3 px-4 py-3 fixed bottom-0 left-0 right-0 bg-black/60 border-t border-white/20 backdrop-blur-md z-30">
-    <input aria-label="Type your health question" autocomplete="off" id="user-input" placeholder="Ask Dr Eliane your health question..." required="" type="text" class="flex-grow w-[200px] rounded-full border border-white/30 bg-transparent px-6 py-2 text-white placeholder-white/60 focus:border-[#00a8cc] focus:outline-none focus:ring-1 focus:ring-[#00a8cc] font-semibold font-montserrat"/>
-    <button aria-label="Send message" id="send-btn" type="submit" class="text-[#00a8cc] hover:text-[#007a9a] focus:outline-none focus:ring-2 focus:ring-[#007a9a] rounded-full p-2 text-2xl">
-     <i class="fas fa-paper-plane"></i>
+   <form aria-label="User input form" class="flex items-center gap-3 px-4 py-3 fixed bottom-0 left-0 right-0 bg-black/60 border-t border-white/20 backdrop-blur-md z-30" id="input-form" role="search">
+    <input aria-label="Type your health question" autocomplete="off" class="flex-grow w-[200px] rounded-full border border-white/30 bg-transparent px-6 py-2 text-white placeholder-white/60 focus:border-[#00a8cc] focus:outline-none focus:ring-1 focus:ring-[#00a8cc] font-semibold font-montserrat" id="user-input" placeholder="Ask Dr Eliane your health question..." required="" type="text"/>
+    <button aria-label="Send message" class="text-[#00a8cc] hover:text-[#007a9a] focus:outline-none focus:ring-2 focus:ring-[#007a9a] rounded-full p-2 text-2xl" id="send-btn" type="submit">
+     <i class="fas fa-paper-plane">
+     </i>
     </button>
-    <button aria-label="Start video talk mode" id="video-talk-btn" type="button" class="text-[#00a8cc] hover:text-[#007a9a] focus:outline-none focus:ring-2 focus:ring-[#007a9a] rounded-full p-2 text-2xl">
-     <i class="fas fa-video"></i>
+    <button aria-label="Start video talk mode" class="text-[#00a8cc] hover:text-[#007a9a] focus:outline-none focus:ring-2 focus:ring-[#007a9a] rounded-full p-2 text-2xl" id="video-talk-btn" type="button">
+     <i class="fas fa-video">
+     </i>
     </button>
    </form>
-   <!-- Deep Contents Button fixed bottom-left -->
-   <button aria-controls="deep-contents-panel" aria-expanded="false" aria-haspopup="dialog" id="deep-contents-btn" title="Open Deep Contents" class="fixed bottom-20 left-4 bg-[#00a8cc] text-black rounded-full px-6 py-2 font-bold shadow-lg hover:bg-[#007a9a] focus:outline-none focus:ring-4 focus:ring-[#007a9a] tracking-widest text-sm uppercase z-40 flex items-center gap-2 select-none">
-    <i class="fas fa-folder-open fa-lg"></i>
-    <span class="hidden sm:inline font-bold">Track</span>
+   <button aria-controls="deep-contents-panel" aria-expanded="false" aria-haspopup="dialog" class="fixed bottom-20 left-4 bg-[#00a8cc] text-black rounded-full px-6 py-2 font-bold shadow-lg hover:bg-[#007a9a] focus:outline-none focus:ring-4 focus:ring-[#007a9a] tracking-widest text-sm uppercase z-40 flex items-center gap-2 select-none" id="deep-contents-btn" title="Open Deep Contents">
+    <i class="fas fa-folder-open fa-lg">
+    </i>
+    <span class="hidden sm:inline font-bold">
+     Track
+    </span>
    </button>
-   <!-- Deep Contents Panel (dialog) -->
-   <dialog aria-labelledby="deep-contents-title" aria-modal="true" id="deep-contents-panel" role="dialog" class="font-montserrat text-white">
+   <dialog aria-labelledby="deep-contents-title" aria-modal="true" class="font-montserrat text-white" id="deep-contents-panel" role="dialog">
     <div class="bg-black/90 border border-[#007a9a] rounded-xl max-w-4xl max-h-[90vh] w-[90vw] flex flex-col overflow-hidden shadow-2xl">
      <header class="flex justify-between items-center border-b border-[#007a9a] px-6 py-4">
-      <h3 id="deep-contents-title" class="text-2xl font-extrabold uppercase tracking-widest text-[#00a8cc] m-0">
+      <h3 class="text-2xl font-extrabold uppercase tracking-widest text-[#00a8cc] m-0" id="deep-contents-title">
        Deep Contents
       </h3>
-      <button aria-label="Close Deep Contents panel" id="deep-contents-close" type="button" class="text-[#007a9a] hover:text-[#00a8cc] focus:outline-none focus:ring-4 focus:ring-[#00a8cc] rounded-full p-1 text-2xl">
-       <i class="fas fa-times"></i>
+      <button aria-label="Close Deep Contents panel" class="text-[#007a9a] hover:text-[#00a8cc] focus:outline-none focus:ring-4 focus:ring-[#00a8cc] rounded-full p-1 text-2xl" id="deep-contents-close" type="button">
+       <i class="fas fa-times">
+       </i>
       </button>
      </header>
      <nav aria-label="Deep Contents Tabs" class="flex border-b border-[#007a9a] overflow-x-auto scrollbar-hide">
@@ -563,49 +601,57 @@
       </button>
      </nav>
      <section aria-labelledby="tab-btn-pill-reminder" class="tab-panel p-6 overflow-y-auto flex-grow" id="tab-pill-reminder" role="tabpanel" tabindex="0">
-      <form id="pill-reminder-form" class="space-y-6 max-w-xl mx-auto">
+      <form class="space-y-6 max-w-xl mx-auto" id="pill-reminder-form">
        <div>
-        <label for="pill-name" class="block mb-2 font-bold text-[#00a8cc] uppercase tracking-widest">Pill Name</label>
-        <input id="pill-name" name="pill-name" placeholder="Enter pill name" required="" type="text" class="w-full rounded-md border border-[#00a8cc] bg-transparent px-4 py-2 text-white placeholder-white/60 focus:border-[#007a9a] focus:ring-1 focus:ring-[#007a9a] focus:outline-none font-semibold"/>
+        <label class="block mb-2 font-bold text-[#00a8cc] uppercase tracking-widest" for="pill-name">
+         Pill Name
+        </label>
+        <input class="w-full rounded-md border border-[#00a8cc] bg-transparent px-4 py-2 text-white placeholder-white/60 focus:border-[#007a9a] focus:ring-1 focus:ring-[#007a9a] focus:outline-none font-semibold" id="pill-name" name="pill-name" placeholder="Enter pill name" required="" type="text"/>
        </div>
        <div>
-        <label for="pill-datetime" class="block mb-2 font-bold text-[#00a8cc] uppercase tracking-widest">Date &amp; Time</label>
-        <input id="pill-datetime" name="pill-datetime" required="" type="datetime-local" class="w-full rounded-md border border-[#00a8cc] bg-transparent px-4 py-2 text-white placeholder-white/60 focus:border-[#007a9a] focus:ring-1 focus:ring-[#007a9a] focus:outline-none font-semibold"/>
+        <label class="block mb-2 font-bold text-[#00a8cc] uppercase tracking-widest" for="pill-datetime">
+         Date &amp; Time
+        </label>
+        <input class="w-full rounded-md border border-[#00a8cc] bg-transparent px-4 py-2 text-white placeholder-white/60 focus:border-[#007a9a] focus:ring-1 focus:ring-[#007a9a] focus:outline-none font-semibold" id="pill-datetime" name="pill-datetime" required="" type="datetime-local"/>
        </div>
        <div>
-        <label for="pill-notes" class="block mb-2 font-bold text-[#00a8cc] uppercase tracking-widest">Notes (optional)</label>
-        <textarea id="pill-notes" name="pill-notes" placeholder="Additional info or instructions" rows="3" class="w-full rounded-md border border-[#00a8cc] bg-transparent px-4 py-2 text-white placeholder-white/60 focus:border-[#007a9a] focus:ring-1 focus:ring-[#007a9a] focus:outline-none font-semibold resize-none"></textarea>
+        <label class="block mb-2 font-bold text-[#00a8cc] uppercase tracking-widest" for="pill-notes">
+         Notes (optional)
+        </label>
+        <textarea class="w-full rounded-md border border-[#00a8cc] bg-transparent px-4 py-2 text-white placeholder-white/60 focus:border-[#007a9a] focus:ring-1 focus:ring-[#007a9a] focus:outline-none font-semibold resize-none" id="pill-notes" name="pill-notes" placeholder="Additional info or instructions" rows="3"></textarea>
        </div>
-       <button type="submit" class="w-full bg-[#00a8cc] text-black font-extrabold uppercase tracking-widest rounded-md py-3 hover:bg-[#007a9a] focus:outline-none focus:ring-4 focus:ring-[#007a9a] transition">
+       <button class="w-full bg-[#00a8cc] text-black font-extrabold uppercase tracking-widest rounded-md py-3 hover:bg-[#007a9a] focus:outline-none focus:ring-4 focus:ring-[#007a9a] transition" type="submit">
         Add Pill Reminder
        </button>
       </form>
-      <div id="pill-reminder-list" class="mt-8 space-y-4 max-w-xl mx-auto"></div>
+      <div class="mt-8 space-y-4 max-w-xl mx-auto" id="pill-reminder-list">
+      </div>
      </section>
      <section aria-labelledby="tab-btn-pharmacies" class="tab-panel hidden p-6 overflow-y-auto flex-grow" id="tab-pharmacies" role="tabpanel" tabindex="0">
-      <form id="pharmacy-search-form" class="mb-6 flex gap-4 max-w-xl mx-auto">
-       <input id="pharmacy-location" name="pharmacy-location" placeholder="Enter your location (city, address, zip)" required="" type="text" class="flex-grow rounded-md border border-[#00a8cc] bg-transparent px-4 py-2 text-white placeholder-white/60 focus:border-[#007a9a] focus:ring-1 focus:ring-[#007a9a] focus:outline-none font-semibold"/>
-       <button type="submit" class="bg-[#00a8cc] text-black font-extrabold uppercase tracking-widest rounded-md px-6 py-3 hover:bg-[#007a9a] focus:outline-none focus:ring-4 focus:ring-[#007a9a] transition">
+      <form class="mb-6 flex gap-4 max-w-xl mx-auto" id="pharmacy-search-form">
+       <input class="flex-grow rounded-md border border-[#00a8cc] bg-transparent px-4 py-2 text-white placeholder-white/60 focus:border-[#007a9a] focus:ring-1 focus:ring-[#007a9a] focus:outline-none font-semibold" id="pharmacy-location" name="pharmacy-location" placeholder="Enter your location (city, address, zip, sector, district, province, capital, town, etc)" required="" type="text"/>
+       <button class="bg-[#00a8cc] text-black font-extrabold uppercase tracking-widest rounded-md px-6 py-3 hover:bg-[#007a9a] focus:outline-none focus:ring-4 focus:ring-[#007a9a] transition" type="submit">
         Search
        </button>
       </form>
-      <div id="pharmacy-results" class="space-y-4 max-w-xl mx-auto"></div>
+      <div class="space-y-4 max-w-xl mx-auto" id="pharmacy-results">
+      </div>
      </section>
      <section aria-labelledby="tab-btn-hospitals" class="tab-panel hidden p-6 overflow-y-auto flex-grow" id="tab-hospitals" role="tabpanel" tabindex="0">
-      <form id="hospital-search-form" class="mb-6 flex gap-4 max-w-xl mx-auto">
-       <input id="hospital-location" name="hospital-location" placeholder="Enter your location (city, address, zip)" required="" type="text" class="flex-grow rounded-md border border-[#00a8cc] bg-transparent px-4 py-2 text-white placeholder-white/60 focus:border-[#007a9a] focus:ring-1 focus:ring-[#007a9a] focus:outline-none font-semibold"/>
-       <button type="submit" class="bg-[#00a8cc] text-black font-extrabold uppercase tracking-widest rounded-md px-6 py-3 hover:bg-[#007a9a] focus:outline-none focus:ring-4 focus:ring-[#007a9a] transition">
+      <form class="mb-6 flex gap-4 max-w-xl mx-auto" id="hospital-search-form">
+       <input class="flex-grow rounded-md border border-[#00a8cc] bg-transparent px-4 py-2 text-white placeholder-white/60 focus:border-[#007a9a] focus:ring-1 focus:ring-[#007a9a] focus:outline-none font-semibold" id="hospital-location" name="hospital-location" placeholder="Enter your location (city, address, zip, sector, district, province, capital, town, etc)" required="" type="text"/>
+       <button class="bg-[#00a8cc] text-black font-extrabold uppercase tracking-widest rounded-md px-6 py-3 hover:bg-[#007a9a] focus:outline-none focus:ring-4 focus:ring-[#007a9a] transition" type="submit">
         Search
        </button>
       </form>
-      <div id="hospital-results" class="space-y-4 max-w-xl mx-auto"></div>
+      <div class="space-y-4 max-w-xl mx-auto" id="hospital-results">
+      </div>
      </section>
     </div>
    </dialog>
   </div>
   <script>
    (() => {
-      // Elements
       const avatarImage = document.getElementById("avatar-image");
       const avatarStatic = document.getElementById("avatar-static");
       const chatPanel = document.getElementById("chat-panel");
@@ -621,45 +667,29 @@
       const closeChatBtn = document.getElementById("close-chat");
       const audioWave = document.getElementById("audio-wave");
 
-      // Tabs
       const tabButtons = document.querySelectorAll(".tab-btn");
       const tabPanels = document.querySelectorAll(".tab-panel");
 
-      // Pill Reminder Elements
       const pillReminderForm = document.getElementById("pill-reminder-form");
       const pillReminderList = document.getElementById("pill-reminder-list");
 
-      // Pharmacy Elements
       const pharmacySearchForm = document.getElementById("pharmacy-search-form");
       const pharmacyResults = document.getElementById("pharmacy-results");
 
-      // Hospital Elements
       const hospitalSearchForm = document.getElementById("hospital-search-form");
       const hospitalResults = document.getElementById("hospital-results");
 
-      // State
-      let mode = "video"; // 'video' or 'text'
+      let mode = "video";
       let chatOpen = false;
       let pillReminders = [];
       let recognition = null;
       let isListening = false;
 
-      // Sample AI greeting message
-      const greetingMessage = {
-        from: "ai",
-        type: "text",
-        content:
-          "Hello! I'm Dr Eliane, your AI health assistant. How can I help you today?",
-        timestamp: new Date().toISOString(),
-      };
-
-      // Utility: format time
       function formatTime(date) {
         const d = new Date(date);
         return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
       }
 
-      // Add chat message
       function addChatMessage({ from, type, content, timestamp }) {
         const messageWrapper = document.createElement("div");
         messageWrapper.className = from === "user" ? "flex justify-end" : "flex justify-start";
@@ -674,7 +704,6 @@
         if (type === "text") {
           messageBubble.textContent = content;
         } else if (type === "video") {
-          // For simulation, show avatar image with label
           const videoReply = document.createElement("div");
           videoReply.className = "relative w-48 h-64 rounded-lg overflow-hidden shadow-lg";
 
@@ -706,7 +735,6 @@
         chatMessages.scrollTop = chatMessages.scrollHeight;
       }
 
-      // Switch to text mode layout
       function switchToTextMode() {
         if (mode === "text") return;
         mode = "text";
@@ -725,7 +753,6 @@
         userInput.focus();
       }
 
-      // Switch to video mode layout
       function switchToVideoMode() {
         if (mode === "video") return;
         mode = "video";
@@ -743,17 +770,26 @@
         userInput.focus();
       }
 
-      // Close chat panel (switch back to video mode)
       function closeChatPanel() {
         switchToVideoMode();
         userInput.value = "";
       }
 
-      // Simulate AI response (text or video)
+      // Immediately welcome user on page load with female voice
+      function welcomeUser() {
+        const welcomeText = "Hello! I am Dr Eliane, your AI health assistant. How can I help you today?";
+        addChatMessage({
+          from: "ai",
+          type: "video",
+          content: "",
+          timestamp: new Date().toISOString(),
+        });
+        speakText(welcomeText);
+      }
+
       function simulateAIResponse(userText) {
         const lowerText = userText.toLowerCase();
 
-        // Decide response type: text or video
         let responseType = "video";
         if (
           lowerText.includes("pill") ||
@@ -765,12 +801,14 @@
           lowerText.includes("sexual") ||
           lowerText.includes("women") ||
           lowerText.includes("period") ||
-          lowerText.includes("weight")
+          lowerText.includes("weight") ||
+          lowerText.includes("nearby") ||
+          lowerText.includes("near me") ||
+          lowerText.includes("location")
         ) {
           responseType = "text";
         }
 
-        // Sample responses
         let responseText = "";
         if (lowerText.includes("hello") || lowerText.includes("hi")) {
           responseText =
@@ -793,6 +831,15 @@
         } else if (lowerText.includes("symptom")) {
           responseText =
             "Please describe your symptoms in detail so I can assist you better.";
+        } else if (lowerText.includes("pharmacy") && (lowerText.includes("nearby") || lowerText.includes("near me") || lowerText.includes("location"))) {
+          responseText = "Please use the 'Find Nearby Pharmacies' tab to search for pharmacies near your location.";
+          // Open Deep Contents panel and switch to pharmacies tab
+          openDeepContentsPanel();
+          selectTab("tab-btn-pharmacies");
+        } else if (lowerText.includes("hospital") && (lowerText.includes("nearby") || lowerText.includes("near me") || lowerText.includes("location"))) {
+          responseText = "Please use the 'Find Nearby Hospitals' tab to search for hospitals near your location.";
+          openDeepContentsPanel();
+          selectTab("tab-btn-hospitals");
         } else {
           responseText =
             "I'm here to help with your health questions. Could you please provide more details?";
@@ -812,12 +859,10 @@
             content: "",
             timestamp: new Date().toISOString(),
           });
-          // Also speak the response using speech synthesis
           speakText(responseText);
         }
       }
 
-      // Speech synthesis for AI responses
       function speakText(text) {
         if (!window.speechSynthesis) return;
         window.speechSynthesis.cancel();
@@ -825,10 +870,21 @@
         utterance.lang = 'en-US';
         utterance.rate = 1;
         utterance.pitch = 1;
+        // Select a female voice if available
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length > 0) {
+          const femaleVoice = voices.find(v => v.lang.startsWith('en') && v.name.toLowerCase().includes('female'));
+          if (femaleVoice) {
+            utterance.voice = femaleVoice;
+          } else {
+            // fallback to any English voice
+            const enVoice = voices.find(v => v.lang.startsWith('en'));
+            if (enVoice) utterance.voice = enVoice;
+          }
+        }
         window.speechSynthesis.speak(utterance);
       }
 
-      // Start voice recognition for video talk mode
       function startListening() {
         if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
           alert("Sorry, your browser does not support Speech Recognition.");
@@ -875,7 +931,6 @@
         recognition.start();
       }
 
-      // Stop voice recognition
       function stopListening() {
         if (recognition) {
           recognition.stop();
@@ -883,7 +938,6 @@
         }
       }
 
-      // Handle form submit (send message)
       inputForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const text = userInput.value.trim();
@@ -905,7 +959,6 @@
         }, 1000);
       });
 
-      // Video talk button toggles video mode and voice recognition
       videoTalkBtn.addEventListener("click", () => {
         if (mode !== "video") {
           switchToVideoMode();
@@ -917,61 +970,32 @@
         }
       });
 
-      // Close chat panel button
       closeChatBtn.addEventListener("click", () => {
         closeChatPanel();
         stopListening();
       });
 
-      // Deep Contents button open panel
       deepContentsBtn.addEventListener("click", () => {
-        if (typeof deepContentsPanel.showModal === "function") {
-          deepContentsPanel.showModal();
-        } else {
-          deepContentsPanel.setAttribute("open", "");
-        }
-        deepContentsBtn.setAttribute("aria-expanded", "true");
-        tabButtons[0].click();
-        tabButtons[0].focus();
+        openDeepContentsPanel();
+        selectTab("tab-btn-pill-reminder");
       });
 
-      // Deep Contents close button
       deepContentsClose.addEventListener("click", () => {
-        if (typeof deepContentsPanel.close === "function") {
-          deepContentsPanel.close();
-        } else {
-          deepContentsPanel.removeAttribute("open");
-        }
-        deepContentsBtn.setAttribute("aria-expanded", "false");
-        deepContentsBtn.focus();
+        closeDeepContentsPanel();
       });
 
-      // Close Deep Contents on outside click or Escape
       deepContentsPanel.addEventListener("click", (e) => {
         if (e.target === deepContentsPanel) {
-          if (typeof deepContentsPanel.close === "function") {
-            deepContentsPanel.close();
-          } else {
-            deepContentsPanel.removeAttribute("open");
-          }
-          deepContentsBtn.setAttribute("aria-expanded", "false");
-          deepContentsBtn.focus();
+          closeDeepContentsPanel();
         }
       });
       deepContentsPanel.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
           e.preventDefault();
-          if (typeof deepContentsPanel.close === "function") {
-            deepContentsPanel.close();
-          } else {
-            deepContentsPanel.removeAttribute("open");
-          }
-          deepContentsBtn.setAttribute("aria-expanded", "false");
-          deepContentsBtn.focus();
+          closeDeepContentsPanel();
         }
       });
 
-      // Accessibility: trap focus inside deep contents panel when open
       deepContentsPanel.addEventListener("keydown", (e) => {
         if (e.key === "Tab") {
           const focusableElements = deepContentsPanel.querySelectorAll(
@@ -994,7 +1018,43 @@
         }
       });
 
-      // Pill Reminder System logic
+      function openDeepContentsPanel() {
+        if (typeof deepContentsPanel.showModal === "function") {
+          deepContentsPanel.showModal();
+        } else {
+          deepContentsPanel.setAttribute("open", "");
+        }
+        deepContentsBtn.setAttribute("aria-expanded", "true");
+      }
+
+      function closeDeepContentsPanel() {
+        if (typeof deepContentsPanel.close === "function") {
+          deepContentsPanel.close();
+        } else {
+          deepContentsPanel.removeAttribute("open");
+        }
+        deepContentsBtn.setAttribute("aria-expanded", "false");
+        deepContentsBtn.focus();
+      }
+
+      function selectTab(tabId) {
+        tabButtons.forEach((b) => {
+          b.setAttribute("aria-selected", "false");
+          b.setAttribute("tabindex", "-1");
+        });
+        const btn = document.getElementById(tabId);
+        if (!btn) return;
+        btn.setAttribute("aria-selected", "true");
+        btn.setAttribute("tabindex", "0");
+
+        tabPanels.forEach((panel) => {
+          panel.classList.add("hidden");
+        });
+        const panel = document.getElementById(btn.getAttribute("aria-controls"));
+        if (panel) panel.classList.remove("hidden");
+        panel.focus();
+      }
+
       function renderPillReminders() {
         pillReminderList.innerHTML = "";
         if (pillReminders.length === 0) {
@@ -1044,7 +1104,479 @@
           pillReminderList.appendChild(card);
         });
       }
-    })();
+
+      pillReminderForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = pillReminderForm["pill-name"].value.trim();
+        const datetime = pillReminderForm["pill-datetime"].value;
+        const notes = pillReminderForm["pill-notes"].value.trim();
+
+        if (!name || !datetime) return;
+
+        pillReminders.push({ name, datetime, notes });
+        renderPillReminders();
+
+        pillReminderForm.reset();
+      });
+
+      tabButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          tabButtons.forEach((b) => {
+            b.setAttribute("aria-selected", "false");
+            b.setAttribute("tabindex", "-1");
+          });
+          btn.setAttribute("aria-selected", "true");
+          btn.setAttribute("tabindex", "0");
+
+          tabPanels.forEach((panel) => {
+            panel.classList.add("hidden");
+          });
+          const panel = document.getElementById(btn.getAttribute("aria-controls"));
+          if (panel) panel.classList.remove("hidden");
+          panel.focus();
+        });
+      });
+
+      // Helper: distance calculation
+      function distance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+      }
+
+      // Fetch and render pharmacies with details and images from Wikidata + OSM
+      async function fetchPharmacies(location) {
+        pharmacyResults.innerHTML = "";
+        const loading = document.createElement("p");
+        loading.textContent = "Searching nearby pharmacies...";
+        loading.className = "text-white/70 font-semibold";
+        pharmacyResults.appendChild(loading);
+
+        try {
+          // Geocode location with Nominatim
+          const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}`);
+          const geoData = await geoRes.json();
+          if (!geoData || geoData.length === 0) {
+            pharmacyResults.innerHTML = `<p class="text-red-500 font-semibold">Location not found. Please try a different query.</p>`;
+            return;
+          }
+          const { lat, lon } = geoData[0];
+
+          // Overpass query for pharmacies within 5km
+          const overpassQuery = `
+            [out:json][timeout:25];
+            (
+              node["amenity"="pharmacy"](around:5000,${lat},${lon});
+              way["amenity"="pharmacy"](around:5000,${lat},${lon});
+              relation["amenity"="pharmacy"](around:5000,${lat},${lon});
+            );
+            out center tags qt 50;
+          `;
+          const overpassRes = await fetch("https://overpass-api.de/api/interpreter", {
+            method: "POST",
+            body: overpassQuery,
+            headers: { "Content-Type": "text/plain" }
+          });
+          const overpassData = await overpassRes.json();
+
+          pharmacyResults.innerHTML = "";
+
+          if (!overpassData.elements || overpassData.elements.length === 0) {
+            pharmacyResults.innerHTML = `<p class="text-white/70 font-semibold">No nearby pharmacies found within 5 km.</p>`;
+            return;
+          }
+
+          // Prepare list with lat/lon and osm_id for Wikidata lookup
+          const pharmacies = overpassData.elements.map(el => {
+            let latEl = el.lat;
+            let lonEl = el.lon;
+            if (!latEl && el.center) {
+              latEl = el.center.lat;
+              lonEl = el.center.lon;
+            }
+            return {
+              osm_id: el.id,
+              osm_type: el.type,
+              lat: latEl,
+              lon: lonEl,
+              tags: el.tags || {},
+              distance: distance(lat, lon, latEl, lonEl)
+            };
+          });
+
+          pharmacies.sort((a, b) => a.distance - b.distance);
+
+          // Fetch Wikidata info for each pharmacy (limit 10)
+          const maxResults = 10;
+          const pharmaciesLimited = pharmacies.slice(0, maxResults);
+
+          // Prepare IDs by type
+          const nodeIds = pharmaciesLimited.filter(p => p.osm_type === "node").map(p => p.osm_id);
+          const wayIds = pharmaciesLimited.filter(p => p.osm_type === "way").map(p => p.osm_id);
+          const relationIds = pharmaciesLimited.filter(p => p.osm_type === "relation").map(p => p.osm_id);
+
+          // Build FILTER for all osm ids and types
+          let filters = [];
+          if (nodeIds.length) filters.push(`?item wdt:P669 ?osmId . FILTER(?osmId IN (${nodeIds.map(id => `"${id}"`).join(", ")}))`);
+          if (wayIds.length) filters.push(`?item wdt:P402 ?osmId . FILTER(?osmId IN (${wayIds.map(id => `"${id}"`).join(", ")}))`);
+          if (relationIds.length) filters.push(`?item wdt:P3845 ?osmId . FILTER(?osmId IN (${relationIds.map(id => `"${id}"`).join(", ")}))`);
+
+          if (filters.length === 0) {
+            renderPharmaciesWithBasicInfo(pharmaciesLimited);
+            return;
+          }
+
+          const sparqlQuery = `
+            SELECT ?item ?itemLabel ?osmId ?image ?phone ?website ?head ?headLabel WHERE {
+              {
+                ${filters.join(" UNION ")}
+              }
+              OPTIONAL { ?item wdt:P18 ?image. }
+              OPTIONAL { ?item wdt:P1329 ?phone. }
+              OPTIONAL { ?item wdt:P856 ?website. }
+              OPTIONAL { ?item wdt:P169 ?head. }
+              SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+            }
+          `;
+
+          const url = "https://query.wikidata.org/sparql?query=" + encodeURIComponent(sparqlQuery);
+          const wikidataRes = await fetch(url, {
+            headers: { "Accept": "application/sparql-results+json" }
+          });
+          const wikidataData = await wikidataRes.json();
+
+          // Map Wikidata results by osmId
+          const wikidataMap = new Map();
+          wikidataData.results.bindings.forEach(item => {
+            const osmId = item.osmId.value;
+            if (!wikidataMap.has(osmId)) {
+              wikidataMap.set(osmId, {
+                image: item.image ? item.image.value : null,
+                phone: item.phone ? item.phone.value : null,
+                website: item.website ? item.website.value : null,
+                head: item.headLabel ? item.headLabel.value : null,
+                label: item.itemLabel ? item.itemLabel.value : null,
+              });
+            }
+          });
+
+          // Render pharmacies with enriched data
+          pharmaciesLimited.forEach(pharmacy => {
+            const osmIdStr = pharmacy.osm_id.toString();
+            const data = wikidataMap.get(osmIdStr) || {};
+
+            const div = document.createElement("div");
+            div.className = "border border-[#00a8cc] rounded-md p-4 bg-[#00a8cc]/15 shadow-sm";
+
+            const name = document.createElement("h4");
+            name.className = "font-extrabold text-[#00a8cc] text-lg";
+            name.textContent = data.label || pharmacy.tags.name || "Pharmacy";
+
+            const addr = document.createElement("p");
+            addr.className = "text-[#a0e9ff] text-sm";
+            let addressText = "";
+            if (pharmacy.tags["addr:street"]) addressText += pharmacy.tags["addr:street"];
+            if (pharmacy.tags["addr:housenumber"]) addressText += " " + pharmacy.tags["addr:housenumber"];
+            if (pharmacy.tags["addr:city"]) addressText += ", " + pharmacy.tags["addr:city"];
+            if (!addressText) addressText = "Address not specified";
+            addr.textContent = addressText;
+
+            const dist = document.createElement("p");
+            dist.className = "text-[#a0e9ff] text-sm";
+            dist.textContent = `Approx. ${pharmacy.distance.toFixed(2)} km away`;
+
+            div.appendChild(name);
+            div.appendChild(addr);
+            div.appendChild(dist);
+
+            // More info button and panel
+            const moreBtn = document.createElement("button");
+            moreBtn.className = "more-btn";
+            moreBtn.textContent = "More";
+            div.appendChild(moreBtn);
+
+            const detailsPanel = document.createElement("div");
+            detailsPanel.className = "details-panel";
+
+            if (data.image) {
+              const img = document.createElement("img");
+              img.src = data.image;
+              img.alt = `Image of ${name.textContent}`;
+              detailsPanel.appendChild(img);
+            } else {
+              // Placeholder image
+              const img = document.createElement("img");
+              img.src = "https://placehold.co/600x400/png?text=No+Image+Available";
+              img.alt = `No image available for ${name.textContent}`;
+              detailsPanel.appendChild(img);
+            }
+
+            if (data.phone) {
+              const phoneP = document.createElement("p");
+              phoneP.textContent = `Phone: ${data.phone}`;
+              detailsPanel.appendChild(phoneP);
+            }
+
+            if (data.website) {
+              const websiteA = document.createElement("a");
+              websiteA.href = data.website;
+              websiteA.target = "_blank";
+              websiteA.rel = "noopener noreferrer";
+              websiteA.textContent = "Website";
+              websiteA.className = "text-[#00a8cc] font-bold hover:text-[#007a9a] focus:outline-none focus:underline";
+              detailsPanel.appendChild(websiteA);
+            }
+
+            if (data.head) {
+              const headP = document.createElement("p");
+              headP.textContent = `Director: ${data.head}`;
+              detailsPanel.appendChild(headP);
+            }
+
+            div.appendChild(detailsPanel);
+
+            moreBtn.addEventListener("click", () => {
+              if (detailsPanel.classList.contains("visible")) {
+                detailsPanel.classList.remove("visible");
+                moreBtn.textContent = "More";
+              } else {
+                detailsPanel.classList.add("visible");
+                moreBtn.textContent = "Less";
+              }
+            });
+
+            pharmacyResults.appendChild(div);
+          });
+        } catch (error) {
+          pharmacyResults.innerHTML = `<p class="text-red-500 font-semibold">Error searching pharmacies. Please try again later.</p>`;
+          console.error(error);
+        }
+      }
+
+      // Fetch and render hospitals with details and images from Wikidata + OSM
+      async function fetchHospitals(location) {
+        hospitalResults.innerHTML = "";
+        const loading = document.createElement("p");
+        loading.textContent = "Searching nearby hospitals...";
+        loading.className = "text-white/70 font-semibold";
+        hospitalResults.appendChild(loading);
+
+        try {
+          const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}`);
+          const geoData = await geoRes.json();
+          if (!geoData || geoData.length === 0) {
+            hospitalResults.innerHTML = `<p class="text-red-500 font-semibold">Location not found. Please try a different query.</p>`;
+            return;
+          }
+          const { lat, lon } = geoData[0];
+
+          const overpassQuery = `
+            [out:json][timeout:25];
+            (
+              node["amenity"="hospital"](around:5000,${lat},${lon});
+              way["amenity"="hospital"](around:5000,${lat},${lon});
+              relation["amenity"="hospital"](around:5000,${lat},${lon});
+            );
+            out center tags qt 50;
+          `;
+          const overpassRes = await fetch("https://overpass-api.de/api/interpreter", {
+            method: "POST",
+            body: overpassQuery,
+            headers: { "Content-Type": "text/plain" }
+          });
+          const overpassData = await overpassRes.json();
+
+          hospitalResults.innerHTML = "";
+
+          if (!overpassData.elements || overpassData.elements.length === 0) {
+            hospitalResults.innerHTML = `<p class="text-white/70 font-semibold">No nearby hospitals found within 5 km.</p>`;
+            return;
+          }
+
+          const hospitals = overpassData.elements.map(el => {
+            let latEl = el.lat;
+            let lonEl = el.lon;
+            if (!latEl && el.center) {
+              latEl = el.center.lat;
+              lonEl = el.center.lon;
+            }
+            return {
+              osm_id: el.id,
+              osm_type: el.type,
+              lat: latEl,
+              lon: lonEl,
+              tags: el.tags || {},
+              distance: distance(lat, lon, latEl, lonEl)
+            };
+          });
+
+          hospitals.sort((a, b) => a.distance - b.distance);
+
+          const maxResults = 10;
+          const hospitalsLimited = hospitals.slice(0, maxResults);
+
+          const nodeIds = hospitalsLimited.filter(p => p.osm_type === "node").map(p => p.osm_id);
+          const wayIds = hospitalsLimited.filter(p => p.osm_type === "way").map(p => p.osm_id);
+          const relationIds = hospitalsLimited.filter(p => p.osm_type === "relation").map(p => p.osm_id);
+
+          let filters = [];
+          if (nodeIds.length) filters.push(`?item wdt:P669 ?osmId . FILTER(?osmId IN (${nodeIds.map(id => `"${id}"`).join(", ")}))`);
+          if (wayIds.length) filters.push(`?item wdt:P402 ?osmId . FILTER(?osmId IN (${wayIds.map(id => `"${id}"`).join(", ")}))`);
+          if (relationIds.length) filters.push(`?item wdt:P3845 ?osmId . FILTER(?osmId IN (${relationIds.map(id => `"${id}"`).join(", ")}))`);
+
+          if (filters.length === 0) {
+            renderHospitalsWithBasicInfo(hospitalsLimited);
+            return;
+          }
+
+          const sparqlQuery = `
+            SELECT ?item ?itemLabel ?osmId ?image ?phone ?website ?head ?headLabel WHERE {
+              {
+                ${filters.join(" UNION ")}
+              }
+              OPTIONAL { ?item wdt:P18 ?image. }
+              OPTIONAL { ?item wdt:P1329 ?phone. }
+              OPTIONAL { ?item wdt:P856 ?website. }
+              OPTIONAL { ?item wdt:P169 ?head. }
+              SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+            }
+          `;
+
+          const url = "https://query.wikidata.org/sparql?query=" + encodeURIComponent(sparqlQuery);
+          const wikidataRes = await fetch(url, {
+            headers: { "Accept": "application/sparql-results+json" }
+          });
+          const wikidataData = await wikidataRes.json();
+
+          const wikidataMap = new Map();
+          wikidataData.results.bindings.forEach(item => {
+            const osmId = item.osmId.value;
+            if (!wikidataMap.has(osmId)) {
+              wikidataMap.set(osmId, {
+                image: item.image ? item.image.value : null,
+                phone: item.phone ? item.phone.value : null,
+                website: item.website ? item.website.value : null,
+                head: item.headLabel ? item.headLabel.value : null,
+                label: item.itemLabel ? item.itemLabel.value : null,
+              });
+            }
+          });
+
+          hospitalsLimited.forEach(hospital => {
+            const osmIdStr = hospital.osm_id.toString();
+            const data = wikidataMap.get(osmIdStr) || {};
+
+            const div = document.createElement("div");
+            div.className = "border border-[#00a8cc] rounded-md p-4 bg-[#00a8cc]/15 shadow-sm";
+
+            const name = document.createElement("h4");
+            name.className = "font-extrabold text-[#00a8cc] text-lg";
+            name.textContent = data.label || hospital.tags.name || "Hospital";
+
+            const addr = document.createElement("p");
+            addr.className = "text-[#a0e9ff] text-sm";
+            let addressText = "";
+            if (hospital.tags["addr:street"]) addressText += hospital.tags["addr:street"];
+            if (hospital.tags["addr:housenumber"]) addressText += " " + hospital.tags["addr:housenumber"];
+            if (hospital.tags["addr:city"]) addressText += ", " + hospital.tags["addr:city"];
+            if (!addressText) addressText = "Address not specified";
+            addr.textContent = addressText;
+
+            const dist = document.createElement("p");
+            dist.className = "text-[#a0e9ff] text-sm";
+            dist.textContent = `Approx. ${hospital.distance.toFixed(2)} km away`;
+
+            div.appendChild(name);
+            div.appendChild(addr);
+            div.appendChild(dist);
+
+            const moreBtn = document.createElement("button");
+            moreBtn.className = "more-btn";
+            moreBtn.textContent = "More";
+            div.appendChild(moreBtn);
+
+            const detailsPanel = document.createElement("div");
+            detailsPanel.className = "details-panel";
+
+            if (data.image) {
+              const img = document.createElement("img");
+              img.src = data.image;
+              img.alt = `Image of ${name.textContent}`;
+              detailsPanel.appendChild(img);
+            } else {
+              const img = document.createElement("img");
+              img.src = "https://placehold.co/600x400/png?text=No+Image+Available";
+              img.alt = `No image available for ${name.textContent}`;
+              detailsPanel.appendChild(img);
+            }
+
+            if (data.phone) {
+              const phoneP = document.createElement("p");
+              phoneP.textContent = `Phone: ${data.phone}`;
+              detailsPanel.appendChild(phoneP);
+            }
+
+            if (data.website) {
+              const websiteA = document.createElement("a");
+              websiteA.href = data.website;
+              websiteA.target = "_blank";
+              websiteA.rel = "noopener noreferrer";
+              websiteA.textContent = "Website";
+              websiteA.className = "text-[#00a8cc] font-bold hover:text-[#007a9a] focus:outline-none focus:underline";
+              detailsPanel.appendChild(websiteA);
+            }
+
+            if (data.head) {
+              const headP = document.createElement("p");
+              headP.textContent = `Director: ${data.head}`;
+              detailsPanel.appendChild(headP);
+            }
+
+            div.appendChild(detailsPanel);
+
+            moreBtn.addEventListener("click", () => {
+              if (detailsPanel.classList.contains("visible")) {
+                detailsPanel.classList.remove("visible");
+                moreBtn.textContent = "More";
+              } else {
+                detailsPanel.classList.add("visible");
+                moreBtn.textContent = "Less";
+              }
+            });
+
+            hospitalResults.appendChild(div);
+          });
+        } catch (error) {
+          hospitalResults.innerHTML = `<p class="text-red-500 font-semibold">Error searching hospitals. Please try again later.</p>`;
+          console.error(error);
+        }
+      }
+
+      pharmacySearchForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const location = pharmacySearchForm["pharmacy-location"].value.trim();
+        if (!location) return;
+        fetchPharmacies(location);
+      });
+
+      hospitalSearchForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const location = hospitalSearchForm["hospital-location"].value.trim();
+        if (!location) return;
+        fetchHospitals(location);
+      });
+
+      // On page load, welcome user immediately
+      window.addEventListener("load", () => {
+        welcomeUser();
+      });
+   })();
   </script>
  </body>
 </html>
