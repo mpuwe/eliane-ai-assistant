@@ -527,7 +527,7 @@
   </style>
  </head>
  <body>
-  <img alt="Cheerful darkskinned girl smiling broadly with natural hair, representing Dr Eliane AI assistant" height="1080" id="background-avatar" src="https://storage.googleapis.com/a1aa/image/d0cbd805-00eb-485e-c299-e56a9b098a42.jpg" width="1920"/>
+  <img alt="Cheerful darkskinned girl smiling broadly with natural hair, representing Dr Eliane AI assistant" height="1080" id="background-avatar" src="dr_elianee.png" width="1920"/>
   <div class="relative w-screen h-screen flex flex-col overflow-hidden" id="app">
    <main aria-label="Dr Eliane AI Assistant main interface" class="flex flex-row w-full h-full transition-all duration-500 ease-in-out" id="main-container" style="width: 100vw; height: 100vh;">
     <section aria-atomic="false" aria-label="Chat panel with Dr Eliane" aria-live="polite" class="hidden" id="chat-panel" role="region">
@@ -544,8 +544,8 @@
      </div>
     </section>
     <section aria-label="Dr Eliane AI Avatar" class="select-none" id="avatar-container">
-     <img alt="Portrait of a cheerful dark-skinned young woman smiling broadly, wearing casual clothes, representing Dr Eliane AI assistant" decoding="async" draggable="false" height="800" id="avatar-image" loading="eager" src="https://storage.googleapis.com/a1aa/image/16b56b2a-c2dd-431b-6642-15bdcc2d3a38.jpg" width="600"/>
-     <img alt="Portrait of a cheerful dark-skinned young woman smiling broadly, wearing casual clothes, representing Dr Eliane AI assistant" class="absolute top-0 left-0 w-full h-full object-contain rounded-lg pointer-events-none" decoding="async" draggable="false" height="800" id="avatar-static" loading="eager" src="https://storage.googleapis.com/a1aa/image/16b56b2a-c2dd-431b-6642-15bdcc2d3a38.jpg" style="user-select:none;" width="600"/>
+     <img alt="Portrait of a cheerful dark-skinned young woman smiling broadly, wearing casual clothes, representing Dr Eliane AI assistant" decoding="async" draggable="false" height="800" id="avatar-image" loading="eager" src="dr_elianee.png" width="600"/>
+     <img alt="Portrait of a cheerful dark-skinned young woman smiling broadly, wearing casual clothes, representing Dr Eliane AI assistant" class="absolute top-0 left-0 w-full h-full object-contain rounded-lg pointer-events-none" decoding="async" draggable="false" height="800" id="avatar-static" loading="eager" src="dr_elianee.png" style="user-select:none;" width="600"/>
      <div aria-hidden="true" class="hidden" id="audio-wave">
       <span>
       </span>
@@ -707,12 +707,12 @@
           const videoReply = document.createElement("div");
           videoReply.className = "relative w-48 h-64 rounded-lg overflow-hidden shadow-lg";
 
-          const videoImg = document.createElement("img");
-          videoImg.src =
-            "https://placehold.co/600x800/png?text=Simulated+video+reply+avatar+of+Dr+Eliane+AI+assistant+speaking+and+smiling";
-          videoImg.alt =
-            "Simulated video reply avatar of Dr Eliane AI assistant speaking and smiling";
-          videoImg.className = "object-cover w-full h-full";
+          // const videoImg = document.createElement("img");
+          // videoImg.src =
+          //   "https://placehold.co/600x800/png?text=Simulated+video+reply+avatar+of+Dr+Eliane+AI+assistant+speaking+and+smiling";
+          // videoImg.alt =
+          //   "Simulated video reply avatar of Dr Eliane AI assistant speaking and smiling";
+          // videoImg.className = " object-cover w-full h-full";
 
           const label = document.createElement("span");
           label.textContent = "Video Reply";
@@ -1511,7 +1511,7 @@
               detailsPanel.appendChild(img);
             } else {
               const img = document.createElement("img");
-              img.src = "https://placehold.co/600x400/png?text=No+Image+Available";
+              img.src = "dr_elianee.png";
               img.alt = `No image available for ${name.textContent}`;
               detailsPanel.appendChild(img);
             }
