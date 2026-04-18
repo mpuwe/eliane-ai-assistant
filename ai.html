@@ -133,6 +133,130 @@
       text-transform: uppercase;
       backdrop-filter: blur(10px);
     }
+    #control-rail {
+      position: fixed;
+      top: 3.5rem;
+      left: 0.8rem;
+      z-index: 44;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .rail-btn {
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(10, 10, 10, 0.7);
+      color: #d8f5ff;
+      border-radius: 9999px;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+    }
+    .rail-btn:hover,
+    .rail-btn:focus {
+      outline: none;
+      border-color: #00a8cc;
+      background: rgba(0, 168, 204, 0.25);
+      color: white;
+    }
+    dialog#auth-modal,
+    dialog#history-modal {
+      border: none;
+      padding: 0;
+      background: rgba(0, 0, 0, 0.72);
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      max-width: 100vw;
+      max-height: 100vh;
+    }
+    dialog#auth-modal::backdrop,
+    dialog#history-modal::backdrop {
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(4px);
+    }
+    .modal-shell {
+      width: min(560px, calc(100vw - 2rem));
+      margin: 8vh auto;
+      background: rgba(9, 12, 18, 0.92);
+      border: 1px solid #007a9a;
+      border-radius: 14px;
+      padding: 1.25rem;
+      color: white;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.65);
+    }
+    .modal-shell h3 {
+      margin: 0 0 0.85rem;
+      color: #9fefff;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 1rem;
+      font-weight: 800;
+    }
+    .auth-input {
+      width: 100%;
+      border: 1px solid rgba(159, 239, 255, 0.35);
+      background: rgba(255, 255, 255, 0.04);
+      color: white;
+      border-radius: 8px;
+      padding: 0.55rem 0.7rem;
+      margin-bottom: 0.65rem;
+      font-size: 0.92rem;
+    }
+    .auth-input:focus {
+      outline: none;
+      border-color: #00a8cc;
+      box-shadow: 0 0 0 2px rgba(0, 168, 204, 0.45);
+    }
+    .auth-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.85rem;
+    }
+    .auth-tab {
+      flex: 1;
+      border: 1px solid rgba(159, 239, 255, 0.32);
+      border-radius: 999px;
+      background: transparent;
+      color: #d1f4ff;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+    }
+    .auth-tab.active {
+      background: rgba(0, 168, 204, 0.25);
+      border-color: #00a8cc;
+      color: white;
+    }
+    .tiny-note {
+      font-size: 0.74rem;
+      color: #b8ecfb;
+      line-height: 1.3;
+      margin-top: 0.5rem;
+    }
+    .history-item {
+      border: 1px solid rgba(159, 239, 255, 0.25);
+      border-radius: 10px;
+      padding: 0.65rem 0.75rem;
+      margin-bottom: 0.55rem;
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .history-item h4 {
+      margin: 0 0 0.2rem;
+      color: #9fefff;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .history-item p {
+      margin: 0;
+      color: #e6faff;
+      font-size: 0.86rem;
+    }
     #user-input {
       flex-grow: 1;
       border: 1px solid rgba(255,255,255,0.3);
@@ -563,6 +687,10 @@
         flex-wrap: nowrap;
         padding-bottom: 0.15rem;
       }
+      #control-rail {
+        top: 0.65rem;
+        left: 0.65rem;
+      }
       #chat-panel {
         width: 100vw;
         max-width: 100vw;
@@ -586,6 +714,45 @@
   <div aria-label="Assistant mode status" id="local-ai-badge">
    Local AI Mode · No External LLM APIs
   </div>
+  <div id="control-rail">
+   <button class="rail-btn" id="new-topic-btn" type="button">
+    New Topic
+   </button>
+   <button class="rail-btn" id="history-btn" type="button">
+    Chat History
+   </button>
+   <button class="rail-btn" id="logout-btn" type="button">
+    Logout
+   </button>
+  </div>
+  <dialog aria-labelledby="auth-title" id="auth-modal">
+   <div class="modal-shell">
+    <h3 id="auth-title">
+     Secure Access
+    </h3>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="auth-login-tab" type="button">Login</button>
+      <button class="auth-tab" id="auth-signup-tab" type="button">Sign Up</button>
+    </div>
+    <form id="auth-form">
+      <input class="auth-input" id="auth-name" placeholder="Name (for sign up)" type="text"/>
+      <input autocomplete="email" class="auth-input" id="auth-email" placeholder="Email" required="" type="email"/>
+      <input autocomplete="current-password" class="auth-input" id="auth-password" minlength="6" placeholder="Password (min 6 chars)" required="" type="password"/>
+      <button class="rail-btn" id="auth-submit-btn" style="width:100%;" type="submit">Login</button>
+      <p aria-live="polite" id="auth-status" style="min-height:1.1rem;margin:0.55rem 0 0;color:#ffb4b4;font-size:0.8rem;"></p>
+    </form>
+    <p class="tiny-note">
+      Session auto-locks after 15 minutes of inactivity. Credentials are stored locally in this browser only.
+    </p>
+   </div>
+  </dialog>
+  <dialog aria-labelledby="history-title" id="history-modal">
+   <div class="modal-shell">
+    <h3 id="history-title">Conversation History</h3>
+    <div id="history-list"></div>
+    <button class="rail-btn" id="history-close-btn" style="width:100%;" type="button">Close</button>
+   </div>
+  </dialog>
   <div class="relative w-screen h-screen flex flex-col overflow-hidden" id="app">
    <main aria-label="Dr Eliane AI Assistant main interface" class="flex flex-row w-full h-full transition-all duration-500 ease-in-out" id="main-container" style="width: 100vw; height: 100vh;">
     <section aria-atomic="false" aria-label="Chat panel with Dr Eliane" aria-live="polite" class="hidden" id="chat-panel" role="region">
@@ -739,6 +906,21 @@
       const closeChatBtn = document.getElementById("close-chat");
       const audioWave = document.getElementById("audio-wave");
       const quickActionButtons = document.querySelectorAll(".quick-action-btn");
+      const newTopicBtn = document.getElementById("new-topic-btn");
+      const historyBtn = document.getElementById("history-btn");
+      const logoutBtn = document.getElementById("logout-btn");
+      const authModal = document.getElementById("auth-modal");
+      const authForm = document.getElementById("auth-form");
+      const authName = document.getElementById("auth-name");
+      const authEmail = document.getElementById("auth-email");
+      const authPassword = document.getElementById("auth-password");
+      const authStatus = document.getElementById("auth-status");
+      const authSubmitBtn = document.getElementById("auth-submit-btn");
+      const authLoginTab = document.getElementById("auth-login-tab");
+      const authSignupTab = document.getElementById("auth-signup-tab");
+      const historyModal = document.getElementById("history-modal");
+      const historyList = document.getElementById("history-list");
+      const historyCloseBtn = document.getElementById("history-close-btn");
 
       const tabButtons = document.querySelectorAll(".tab-btn");
       const tabPanels = document.querySelectorAll(".tab-panel");
@@ -759,6 +941,12 @@
       let isListening = false;
       let lastFocusedElement = null;
       const PILL_STORAGE_KEY = "dr-eliane-pill-reminders";
+      const USER_STORAGE_KEY = "dr-eliane-users";
+      const SESSION_STORAGE_KEY = "dr-eliane-session";
+      const HISTORY_PREFIX = "dr-eliane-history";
+      let authMode = "login";
+      let activeUser = null;
+      let inactivityTimer = null;
       const conversationState = {
         recentSymptoms: [],
         medications: [],
@@ -777,6 +965,127 @@
         "bleeding heavily",
         "severe bleeding",
       ];
+
+      function getUserHistoryKey(email) {
+        return `${HISTORY_PREFIX}:${email.toLowerCase()}`;
+      }
+
+      function getUsers() {
+        try {
+          return JSON.parse(localStorage.getItem(USER_STORAGE_KEY) || "[]");
+        } catch {
+          return [];
+        }
+      }
+
+      function setUsers(users) {
+        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(users));
+      }
+
+      async function sha256(text) {
+        const data = new TextEncoder().encode(text);
+        const hash = await crypto.subtle.digest("SHA-256", data);
+        return Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, "0")).join("");
+      }
+
+      function setAuthMode(mode) {
+        authMode = mode;
+        const isLogin = mode === "login";
+        authLoginTab.classList.toggle("active", isLogin);
+        authSignupTab.classList.toggle("active", !isLogin);
+        authName.style.display = isLogin ? "none" : "block";
+        authName.required = !isLogin;
+        authSubmitBtn.textContent = isLogin ? "Login" : "Create Account";
+        authStatus.textContent = "";
+      }
+
+      function setSession(user) {
+        activeUser = user;
+        localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify({
+          email: user.email,
+          lastSeen: Date.now(),
+        }));
+      }
+
+      function clearSession() {
+        localStorage.removeItem(SESSION_STORAGE_KEY);
+        activeUser = null;
+      }
+
+      function resetInactivityTimer() {
+        if (!activeUser) return;
+        if (inactivityTimer) clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(() => {
+          logout("Session expired due to inactivity.");
+        }, 15 * 60 * 1000);
+        const session = JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY) || "{}");
+        if (session.email) {
+          session.lastSeen = Date.now();
+          localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+        }
+      }
+
+      function bindActivityListeners() {
+        ["click", "keydown", "mousemove", "touchstart"].forEach((evt) => {
+          window.addEventListener(evt, resetInactivityTimer, { passive: true });
+        });
+      }
+
+      function requireAuth() {
+        if (typeof authModal.showModal === "function") authModal.showModal();
+        else authModal.setAttribute("open", "");
+      }
+
+      function closeAuthModal() {
+        if (typeof authModal.close === "function") authModal.close();
+        else authModal.removeAttribute("open");
+      }
+
+      function saveHistoryEntry(sender, message) {
+        if (!activeUser) return;
+        const key = getUserHistoryKey(activeUser.email);
+        const raw = localStorage.getItem(key);
+        let records = [];
+        try {
+          records = raw ? JSON.parse(raw) : [];
+        } catch {
+          records = [];
+        }
+        records.push({
+          sender,
+          message,
+          at: new Date().toISOString(),
+        });
+        localStorage.setItem(key, JSON.stringify(records.slice(-200)));
+      }
+
+      function renderHistory() {
+        if (!activeUser) {
+          historyList.innerHTML = '<p class="tiny-note">Please login first.</p>';
+          return;
+        }
+        const key = getUserHistoryKey(activeUser.email);
+        let records = [];
+        try {
+          records = JSON.parse(localStorage.getItem(key) || "[]");
+        } catch {
+          records = [];
+        }
+        if (!records.length) {
+          historyList.innerHTML = '<p class="tiny-note">No history yet for this account.</p>';
+          return;
+        }
+        historyList.innerHTML = "";
+        records.slice(-20).reverse().forEach((item) => {
+          const entry = document.createElement("div");
+          entry.className = "history-item";
+          entry.innerHTML = `
+            <h4>${item.sender === "user" ? "You" : "Dr Eliane"} · ${new Date(item.at).toLocaleString()}</h4>
+            <p>${String(item.message).replace(/</g, "&lt;")}</p>
+          `;
+          historyList.appendChild(entry);
+        });
+      }
 
       function formatTime(date) {
         const d = new Date(date);
@@ -823,6 +1132,11 @@
         messageWrapper.appendChild(messageBubble);
         chatMessages.appendChild(messageWrapper);
         chatMessages.scrollTop = chatMessages.scrollHeight;
+        if (type === "text") {
+          saveHistoryEntry(from, content);
+        } else if (type === "video") {
+          saveHistoryEntry(from, "[video reply]");
+        }
       }
 
       function inferHealthContext(text) {
@@ -1080,6 +1394,16 @@
         }
       }
 
+      function logout(message = "Logged out successfully.") {
+        clearSession();
+        if (inactivityTimer) clearTimeout(inactivityTimer);
+        chatMessages.innerHTML = "";
+        userInput.value = "";
+        authPassword.value = "";
+        authStatus.textContent = message;
+        requireAuth();
+      }
+
       inputForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const text = userInput.value.trim();
@@ -1108,6 +1432,85 @@
           userInput.value = prompt;
           inputForm.requestSubmit();
         });
+      });
+
+      newTopicBtn.addEventListener("click", () => {
+        chatMessages.innerHTML = "";
+        addChatMessage({
+          from: "ai",
+          type: "text",
+          content: "New topic started. Share your concern and I’ll help step-by-step.",
+          timestamp: new Date().toISOString(),
+        });
+      });
+
+      historyBtn.addEventListener("click", () => {
+        renderHistory();
+        if (typeof historyModal.showModal === "function") historyModal.showModal();
+        else historyModal.setAttribute("open", "");
+      });
+
+      historyCloseBtn.addEventListener("click", () => {
+        if (typeof historyModal.close === "function") historyModal.close();
+        else historyModal.removeAttribute("open");
+      });
+
+      logoutBtn.addEventListener("click", () => {
+        logout();
+      });
+
+      authLoginTab.addEventListener("click", () => setAuthMode("login"));
+      authSignupTab.addEventListener("click", () => setAuthMode("signup"));
+
+      authForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = authEmail.value.trim().toLowerCase();
+        const password = authPassword.value;
+        const name = authName.value.trim();
+        if (!email || !password) return;
+
+        const users = getUsers();
+        const passwordHash = await sha256(password);
+
+        if (authMode === "signup") {
+          if (!name) {
+            authStatus.textContent = "Please enter your name.";
+            return;
+          }
+          if (users.some((u) => u.email === email)) {
+            authStatus.textContent = "Account already exists. Please log in.";
+            setAuthMode("login");
+            return;
+          }
+          const newUser = { name, email, passwordHash, createdAt: new Date().toISOString() };
+          users.push(newUser);
+          setUsers(users);
+          setSession(newUser);
+          closeAuthModal();
+          addChatMessage({
+            from: "ai",
+            type: "text",
+            content: `Welcome ${newUser.name}. Your secure local account is ready. How are you feeling today?`,
+            timestamp: new Date().toISOString(),
+          });
+          resetInactivityTimer();
+          return;
+        }
+
+        const user = users.find((u) => u.email === email);
+        if (!user || user.passwordHash !== passwordHash) {
+          authStatus.textContent = "Invalid credentials.";
+          return;
+        }
+        setSession(user);
+        closeAuthModal();
+        addChatMessage({
+          from: "ai",
+          type: "text",
+          content: `Welcome back, ${user.name}. Let’s continue from where we left off.`,
+          timestamp: new Date().toISOString(),
+        });
+        resetInactivityTimer();
       });
 
       videoTalkBtn.addEventListener("click", () => {
@@ -1709,9 +2112,22 @@
 
       // On page load, welcome user immediately
       window.addEventListener("load", () => {
+        setAuthMode("login");
         loadPillReminders();
         renderPillReminders();
-        welcomeUser();
+        bindActivityListeners();
+        const savedSession = JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY) || "null");
+        if (savedSession?.email && Date.now() - (savedSession.lastSeen || 0) < 15 * 60 * 1000) {
+          const users = getUsers();
+          const user = users.find((u) => u.email === savedSession.email);
+          if (user) {
+            setSession(user);
+            resetInactivityTimer();
+            welcomeUser();
+            return;
+          }
+        }
+        requireAuth();
       });
    })();
   </script>
