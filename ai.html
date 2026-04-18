@@ -292,14 +292,18 @@
     #user-input {
       flex-grow: 1;
       border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 9999px;
-      padding: 0.5rem 1.5rem;
+      border-radius: 18px;
+      padding: 0.55rem 0.9rem;
       font-size: 1rem;
       color: white;
       background: transparent;
       outline-offset: 2px;
       font-weight: 500;
       font-family: "Montserrat", sans-serif;
+      min-height: 46px;
+      max-height: 120px;
+      resize: none;
+      line-height: 1.35;
     }
     #user-input::placeholder {
       color: rgba(255,255,255,0.6);
@@ -809,6 +813,7 @@
     <section aria-label="Dr Eliane AI Avatar" class="select-none" id="avatar-container">
      <img alt="Portrait of a cheerful dark-skinned young woman smiling broadly, wearing casual clothes, representing Dr Eliane AI assistant" decoding="async" draggable="false" height="800" id="avatar-image" loading="eager" src="dr_elianee.png" width="600"/>
      <img alt="Portrait of a cheerful dark-skinned young woman smiling broadly, wearing casual clothes, representing Dr Eliane AI assistant" class="absolute top-0 left-0 w-full h-full object-contain rounded-lg pointer-events-none" decoding="async" draggable="false" height="800" id="avatar-static" loading="eager" src="dr_elianee.png" style="user-select:none;" width="600"/>
+     <div aria-hidden="true" id="mouth-indicator"></div>
      <div aria-hidden="true" class="hidden" id="audio-wave">
       <span>
       </span>
@@ -848,7 +853,7 @@
     </button>
    </div>
    <form aria-label="User input form" class="flex items-center gap-3 px-4 py-3 fixed bottom-0 left-0 right-0 bg-black/60 border-t border-white/20 backdrop-blur-md z-30" id="input-form" role="search">
-    <input aria-label="Type your health question" autocomplete="off" class="flex-grow w-[200px] rounded-full border border-white/30 bg-transparent px-6 py-2 text-white placeholder-white/60 focus:border-[#00a8cc] focus:outline-none focus:ring-1 focus:ring-[#00a8cc] font-semibold font-montserrat" id="user-input" placeholder="Ask Dr Eliane your health question..." required="" type="text"/>
+    <textarea aria-label="Type your health question" autocomplete="off" class="flex-grow w-[200px] border border-white/30 bg-transparent px-6 py-2 text-white placeholder-white/60 focus:border-[#00a8cc] focus:outline-none focus:ring-1 focus:ring-[#00a8cc] font-semibold font-montserrat" id="user-input" placeholder="Ask Dr Eliane your health question..." required=""></textarea>
     <button aria-label="Send message" class="text-[#00a8cc] hover:text-[#007a9a] focus:outline-none focus:ring-2 focus:ring-[#007a9a] rounded-full p-2 text-2xl" id="send-btn" type="submit">
      <i class="fas fa-paper-plane">
      </i>
@@ -940,6 +945,7 @@
   <script>
    (() => {
       const avatarImage = document.getElementById("avatar-image");
+      const avatarContainer = document.getElementById("avatar-container");
       const avatarStatic = document.getElementById("avatar-static");
       const chatPanel = document.getElementById("chat-panel");
       const chatMessages = document.getElementById("chat-messages");
@@ -1263,18 +1269,21 @@
 
         recognition.onstart = () => {
           isListening = true;
+          avatarContainer.classList.add("listening");
           audioWave.classList.remove("hidden");
           videoTalkBtn.classList.add("text-[#007a9a]");
         };
 
         recognition.onend = () => {
           isListening = false;
+          avatarContainer.classList.remove("listening");
           audioWave.classList.add("hidden");
           videoTalkBtn.classList.remove("text-[#007a9a]");
         };
 
         recognition.onerror = (event) => {
           isListening = false;
+          avatarContainer.classList.remove("listening");
           audioWave.classList.add("hidden");
           videoTalkBtn.classList.remove("text-[#007a9a]");
           console.error("Speech recognition error", event.error);
