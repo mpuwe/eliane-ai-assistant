@@ -37,22 +37,54 @@
       display: flex;
       flex-direction: column;
       background-color: rgba(243, 244, 246, 0.1);
-      border-right: 1px solid rgba(209, 213, 219, 0.3);
-      width: 30vw;
-      max-width: 30vw;
-      min-width: 280px;
+      border-left: 1px solid rgba(209, 213, 219, 0.3);
+      width: 32vw;
+      max-width: 32vw;
+      min-width: 320px;
       height: 100vh;
       overflow: hidden;
-      transition: width 0.5s ease-in-out;
+      transition: width 0.35s ease-in-out;
       z-index: 20;
       color: white;
       backdrop-filter: saturate(180%) blur(20px);
     }
-    #chat-panel.hidden {
+    #track-panel {
       width: 0;
       min-width: 0;
       overflow: hidden;
-      display: none;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      transition: width 0.35s ease;
+      border-right: 1px solid rgba(209, 213, 219, 0.3);
+      background: rgba(10, 18, 28, 0.74);
+      backdrop-filter: saturate(180%) blur(14px);
+      padding: 0;
+      z-index: 23;
+    }
+    #track-panel.open {
+      width: 20vw;
+      min-width: 250px;
+      padding: 1rem 0.85rem;
+    }
+    .track-action {
+      border: 1px solid rgba(159, 239, 255, 0.3);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      color: #d9f7ff;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-align: left;
+      padding: 0.65rem 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .track-action:hover,
+    .track-action:focus {
+      outline: none;
+      border-color: #00a8cc;
+      background: rgba(0, 168, 204, 0.22);
     }
     #chat-messages {
       flex-grow: 1;
@@ -619,6 +651,14 @@
       z-index: 10;
       filter: drop-shadow(0 0 4px rgba(0, 168, 204, 0.7));
     }
+    #avatar-image.speaking {
+      animation: talkBob 0.65s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(0, 168, 204, 0.9));
+    }
+    @keyframes talkBob {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-6px) scale(1.01); }
+    }
     #avatar-static {
       position: absolute;
       top: 0;
@@ -695,9 +735,14 @@
         width: 100vw;
         max-width: 100vw;
         min-width: 100vw;
-        height: 40vh;
-        border-right: none;
+        height: 35vh;
+        border-left: none;
         border-top: 1px solid rgba(209, 213, 219, 0.3);
+      }
+      #track-panel.open {
+        width: 100vw;
+        min-width: 100vw;
+        height: 25vh;
       }
       #main-container {
         flex-direction: column;
@@ -755,19 +800,12 @@
   </dialog>
   <div class="relative w-screen h-screen flex flex-col overflow-hidden" id="app">
    <main aria-label="Dr Eliane AI Assistant main interface" class="flex flex-row w-full h-full transition-all duration-500 ease-in-out" id="main-container" style="width: 100vw; height: 100vh;">
-    <section aria-atomic="false" aria-label="Chat panel with Dr Eliane" aria-live="polite" class="hidden" id="chat-panel" role="region">
-     <header class="flex items-center justify-between px-4 py-3 border-b border-white/30 bg-transparent">
-      <h2 class="text-lg font-bold text-white tracking-widest select-none">
-       Chat with Dr Eliane
-      </h2>
-      <button aria-label="Close chat panel" class="text-white hover:text-[#00a8cc] focus:outline-none" id="close-chat" type="button">
-       <i class="fas fa-times fa-lg">
-       </i>
-      </button>
-     </header>
-     <div class="flex flex-col space-y-4 px-4 py-3 overflow-y-auto" id="chat-messages" role="log" style="color: white;" tabindex="0">
-     </div>
-    </section>
+    <aside aria-label="Track tools panel" id="track-panel">
+      <button class="track-action" data-track-tab="tab-pill-reminder" type="button">💊 Pill Reminder Setup</button>
+      <button class="track-action" data-track-tab="tab-pharmacies" type="button">🏪 Nearby Pharmacy Search</button>
+      <button class="track-action" data-track-tab="tab-hospitals" type="button">🏥 Nearby Hospital Search</button>
+      <button class="track-action" id="track-open-deep" type="button">Open Full Track Workspace</button>
+    </aside>
     <section aria-label="Dr Eliane AI Avatar" class="select-none" id="avatar-container">
      <img alt="Portrait of a cheerful dark-skinned young woman smiling broadly, wearing casual clothes, representing Dr Eliane AI assistant" decoding="async" draggable="false" height="800" id="avatar-image" loading="eager" src="dr_elianee.png" width="600"/>
      <img alt="Portrait of a cheerful dark-skinned young woman smiling broadly, wearing casual clothes, representing Dr Eliane AI assistant" class="absolute top-0 left-0 w-full h-full object-contain rounded-lg pointer-events-none" decoding="async" draggable="false" height="800" id="avatar-static" loading="eager" src="dr_elianee.png" style="user-select:none;" width="600"/>
@@ -782,6 +820,16 @@
       </span>
       <span>
       </span>
+     </div>
+    </section>
+    <section aria-atomic="false" aria-label="Conversation output panel" aria-live="polite" id="chat-panel" role="region">
+     <header class="flex items-center justify-between px-4 py-3 border-b border-white/30 bg-transparent">
+      <h2 class="text-lg font-bold text-white tracking-widest select-none">
+       Output Stream
+      </h2>
+      <span class="text-xs text-[#9fefff] font-semibold">AI speaks with animated avatar</span>
+     </header>
+     <div class="flex flex-col space-y-4 px-4 py-3 overflow-y-auto" id="chat-messages" role="log" style="color: white;" tabindex="0">
      </div>
     </section>
    </main>
@@ -903,7 +951,6 @@
       const deepContentsBtn = document.getElementById("deep-contents-btn");
       const deepContentsPanel = document.getElementById("deep-contents-panel");
       const deepContentsClose = document.getElementById("deep-contents-close");
-      const closeChatBtn = document.getElementById("close-chat");
       const audioWave = document.getElementById("audio-wave");
       const quickActionButtons = document.querySelectorAll(".quick-action-btn");
       const newTopicBtn = document.getElementById("new-topic-btn");
@@ -935,7 +982,6 @@
       const hospitalResults = document.getElementById("hospital-results");
 
       let mode = "video";
-      let chatOpen = false;
       let pillReminders = [];
       let recognition = null;
       let isListening = false;
@@ -1055,15 +1101,13 @@
       function switchToTextMode() {
         if (mode === "text") return;
         mode = "text";
-        chatOpen = true;
-        chatPanel.classList.remove("hidden");
         mainContainer.style.width = "100vw";
         mainContainer.style.height = "100vh";
         mainContainer.style.display = "flex";
         mainContainer.style.flexDirection = "row";
         mainContainer.style.transition = "all 0.5s ease-in-out";
         mainContainer.style.gap = "0";
-        avatarImage.style.width = "70vw";
+        avatarImage.style.width = "100%";
         avatarImage.style.height = "auto";
         avatarStatic.style.opacity = "1";
         audioWave.classList.add("hidden");
@@ -1073,14 +1117,12 @@
       function switchToVideoMode() {
         if (mode === "video") return;
         mode = "video";
-        chatOpen = false;
-        chatPanel.classList.add("hidden");
         mainContainer.style.width = "100vw";
         mainContainer.style.height = "100vh";
         mainContainer.style.display = "flex";
         mainContainer.style.flexDirection = "row";
         mainContainer.style.transition = "all 0.5s ease-in-out";
-        avatarImage.style.width = "100vw";
+        avatarImage.style.width = "100%";
         avatarImage.style.height = "auto";
         avatarStatic.style.opacity = "1";
         audioWave.classList.remove("hidden");
@@ -1187,6 +1229,18 @@
             if (enVoice) utterance.voice = enVoice;
           }
         }
+        utterance.onstart = () => {
+          avatarImage.classList.add("speaking");
+          audioWave.classList.remove("hidden");
+        };
+        utterance.onend = () => {
+          avatarImage.classList.remove("speaking");
+          audioWave.classList.add("hidden");
+        };
+        utterance.onerror = () => {
+          avatarImage.classList.remove("speaking");
+          audioWave.classList.add("hidden");
+        };
         window.speechSynthesis.speak(utterance);
       }
 
@@ -1379,12 +1433,25 @@
         }
       });
 
-      closeChatBtn.addEventListener("click", () => {
-        closeChatPanel();
-        stopListening();
+      deepContentsBtn.addEventListener("click", () => {
+        trackPanel.classList.toggle("open");
       });
 
-      deepContentsBtn.addEventListener("click", () => {
+      trackActions.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const panelId = btn.getAttribute("data-track-tab");
+          if (!panelId) return;
+          openDeepContentsPanel();
+          const tabButtonId = panelId === "tab-pill-reminder"
+            ? "tab-btn-pill-reminder"
+            : panelId === "tab-pharmacies"
+              ? "tab-btn-pharmacies"
+              : "tab-btn-hospitals";
+          selectTab(tabButtonId);
+        });
+      });
+
+      trackOpenDeep.addEventListener("click", () => {
         openDeepContentsPanel();
         selectTab("tab-btn-pill-reminder");
       });
