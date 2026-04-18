@@ -659,49 +659,9 @@
       animation: talkBob 0.65s ease-in-out infinite;
       filter: drop-shadow(0 0 10px rgba(0, 168, 204, 0.9));
     }
-    #avatar-container.speaking #avatar-image,
-    #avatar-container.speaking #avatar-static {
-      animation: headNod 0.58s ease-in-out infinite;
-    }
-    #avatar-container.listening #avatar-image,
-    #avatar-container.listening #avatar-static {
-      animation: attentiveTilt 1.8s ease-in-out infinite;
-    }
-    #mouth-indicator {
-      position: absolute;
-      bottom: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 26px;
-      height: 7px;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(0, 168, 204, 0.6);
-      z-index: 30;
-      opacity: 0;
-      transition: opacity 0.15s ease;
-      pointer-events: none;
-    }
-    #avatar-container.speaking #mouth-indicator {
-      opacity: 1;
-      animation: mouthOpenClose 0.24s ease-in-out infinite alternate;
-    }
     @keyframes talkBob {
       0%, 100% { transform: translateY(0) scale(1); }
       50% { transform: translateY(-6px) scale(1.01); }
-    }
-    @keyframes headNod {
-      0%, 100% { transform: rotate(0deg) translateY(0); }
-      35% { transform: rotate(-1.8deg) translateY(-3px); }
-      70% { transform: rotate(1.2deg) translateY(1px); }
-    }
-    @keyframes attentiveTilt {
-      0%, 100% { transform: rotate(0deg) translateX(0); }
-      50% { transform: rotate(-2.1deg) translateX(-5px); }
-    }
-    @keyframes mouthOpenClose {
-      from { height: 6px; width: 24px; }
-      to { height: 18px; width: 18px; border-radius: 12px; }
     }
     #avatar-static {
       position: absolute;
@@ -828,7 +788,6 @@
       <input autocomplete="email" class="auth-input" id="auth-email" placeholder="Email" required="" type="email"/>
       <input autocomplete="current-password" class="auth-input" id="auth-password" minlength="6" placeholder="Password (min 6 chars)" required="" type="password"/>
       <button class="rail-btn" id="auth-submit-btn" style="width:100%;" type="submit">Login</button>
-      <button class="rail-btn" id="guest-access-btn" style="width:100%;margin-top:0.45rem;" type="button">Continue as Guest</button>
       <p aria-live="polite" id="auth-status" style="min-height:1.1rem;margin:0.55rem 0 0;color:#ffb4b4;font-size:0.8rem;"></p>
     </form>
     <p class="tiny-note">
@@ -1000,9 +959,6 @@
       const deepContentsClose = document.getElementById("deep-contents-close");
       const audioWave = document.getElementById("audio-wave");
       const quickActionButtons = document.querySelectorAll(".quick-action-btn");
-      const trackPanel = document.getElementById("track-panel");
-      const trackActions = document.querySelectorAll(".track-action[data-track-tab]");
-      const trackOpenDeep = document.getElementById("track-open-deep");
       const newTopicBtn = document.getElementById("new-topic-btn");
       const historyBtn = document.getElementById("history-btn");
       const logoutBtn = document.getElementById("logout-btn");
@@ -1013,7 +969,6 @@
       const authPassword = document.getElementById("auth-password");
       const authStatus = document.getElementById("auth-status");
       const authSubmitBtn = document.getElementById("auth-submit-btn");
-      const guestAccessBtn = document.getElementById("guest-access-btn");
       const authLoginTab = document.getElementById("auth-login-tab");
       const authSignupTab = document.getElementById("auth-signup-tab");
       const historyModal = document.getElementById("history-modal");
@@ -1038,151 +993,6 @@
       let isListening = false;
       let lastFocusedElement = null;
       const PILL_STORAGE_KEY = "dr-eliane-pill-reminders";
-      const USER_STORAGE_KEY = "dr-eliane-users";
-      const SESSION_STORAGE_KEY = "dr-eliane-session";
-      const HISTORY_PREFIX = "dr-eliane-history";
-      let authMode = "login";
-      let activeUser = null;
-      let inactivityTimer = null;
-      const conversationState = {
-        recentSymptoms: [],
-        medications: [],
-        conditions: [],
-      };
-
-      const emergencyKeywords = [
-        "chest pain",
-        "difficulty breathing",
-        "trouble breathing",
-        "shortness of breath",
-        "fainting",
-        "seizure",
-        "stroke",
-        "suicidal",
-        "bleeding heavily",
-        "severe bleeding",
-      ];
-
-      function getUserHistoryKey(email) {
-        return `${HISTORY_PREFIX}:${email.toLowerCase()}`;
-      }
-
-      function getUsers() {
-        try {
-          return JSON.parse(localStorage.getItem(USER_STORAGE_KEY) || "[]");
-        } catch {
-          return [];
-        }
-      }
-
-      function setUsers(users) {
-        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(users));
-      }
-
-      async function sha256(text) {
-        const data = new TextEncoder().encode(text);
-        const hash = await crypto.subtle.digest("SHA-256", data);
-        return Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, "0")).join("");
-      }
-
-      function setAuthMode(mode) {
-        authMode = mode;
-        const isLogin = mode === "login";
-        authLoginTab.classList.toggle("active", isLogin);
-        authSignupTab.classList.toggle("active", !isLogin);
-        authName.style.display = isLogin ? "none" : "block";
-        authName.required = !isLogin;
-        authSubmitBtn.textContent = isLogin ? "Login" : "Create Account";
-        authStatus.textContent = "";
-      }
-
-      function setSession(user) {
-        activeUser = user;
-        localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify({
-          email: user.email,
-          lastSeen: Date.now(),
-        }));
-      }
-
-      function clearSession() {
-        localStorage.removeItem(SESSION_STORAGE_KEY);
-        activeUser = null;
-      }
-
-      function resetInactivityTimer() {
-        if (!activeUser) return;
-        if (inactivityTimer) clearTimeout(inactivityTimer);
-        inactivityTimer = setTimeout(() => {
-          logout("Session expired due to inactivity.");
-        }, 15 * 60 * 1000);
-        const session = JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY) || "{}");
-        if (session.email) {
-          session.lastSeen = Date.now();
-          localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
-        }
-      }
-
-      function bindActivityListeners() {
-        ["click", "keydown", "mousemove", "touchstart"].forEach((evt) => {
-          window.addEventListener(evt, resetInactivityTimer, { passive: true });
-        });
-      }
-
-      function requireAuth() {
-        if (typeof authModal.showModal === "function") authModal.showModal();
-        else authModal.setAttribute("open", "");
-      }
-
-      function closeAuthModal() {
-        if (typeof authModal.close === "function") authModal.close();
-        else authModal.removeAttribute("open");
-      }
-
-      function saveHistoryEntry(sender, message) {
-        if (!activeUser) return;
-        const key = getUserHistoryKey(activeUser.email);
-        const raw = localStorage.getItem(key);
-        let records = [];
-        try {
-          records = raw ? JSON.parse(raw) : [];
-        } catch {
-          records = [];
-        }
-        records.push({
-          sender,
-          message,
-          at: new Date().toISOString(),
-        });
-        localStorage.setItem(key, JSON.stringify(records.slice(-200)));
-      }
-
-      function renderHistory() {
-        if (!activeUser) {
-          historyList.innerHTML = '<p class="tiny-note">Please login first.</p>';
-          return;
-        }
-        const key = getUserHistoryKey(activeUser.email);
-        let records = [];
-        try {
-          records = JSON.parse(localStorage.getItem(key) || "[]");
-        } catch {
-          records = [];
-        }
-        if (!records.length) {
-          historyList.innerHTML = '<p class="tiny-note">No history yet for this account.</p>';
-          return;
-        }
-        historyList.innerHTML = "";
-        records.slice(-20).reverse().forEach((item) => {
-          const entry = document.createElement("div");
-          entry.className = "history-item";
-          entry.innerHTML = `
-            <h4>${item.sender === "user" ? "You" : "Dr Eliane"} · ${new Date(item.at).toLocaleString()}</h4>
-            <p>${String(item.message).replace(/</g, "&lt;")}</p>
-          `;
-          historyList.appendChild(entry);
-        });
-      }
 
       function formatTime(date) {
         const d = new Date(date);
@@ -1396,11 +1206,14 @@
 
         addChatMessage({
           from: "ai",
-          type: "video",
-          content: "",
+          type: "text",
+          content: responseText,
           timestamp: new Date().toISOString(),
         });
-        speakText(responseText.replace(/\n/g, " "));
+
+        if (mode !== "text") {
+          speakText(responseText.replace(/\n/g, " "));
+        }
       }
 
       function speakText(text) {
@@ -1424,18 +1237,14 @@
         }
         utterance.onstart = () => {
           avatarImage.classList.add("speaking");
-          avatarContainer.classList.add("speaking");
-          avatarContainer.classList.remove("listening");
           audioWave.classList.remove("hidden");
         };
         utterance.onend = () => {
           avatarImage.classList.remove("speaking");
-          avatarContainer.classList.remove("speaking");
           audioWave.classList.add("hidden");
         };
         utterance.onerror = () => {
           avatarImage.classList.remove("speaking");
-          avatarContainer.classList.remove("speaking");
           audioWave.classList.add("hidden");
         };
         window.speechSynthesis.speak(utterance);
@@ -1513,24 +1322,6 @@
         requireAuth();
       }
 
-      function enterGuestMode() {
-        const guest = {
-          name: "Guest",
-          email: "guest@local",
-          createdAt: new Date().toISOString(),
-        };
-        setSession(guest);
-        closeAuthModal();
-        addChatMessage({
-          from: "ai",
-          type: "video",
-          content: "",
-          timestamp: new Date().toISOString(),
-        });
-        speakText("Welcome guest. All features are now available. You can start by clicking Track to open tools on the left.");
-        resetInactivityTimer();
-      }
-
       inputForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const text = userInput.value.trim();
@@ -1552,13 +1343,6 @@
         }, 1000);
       });
 
-      userInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          inputForm.requestSubmit();
-        }
-      });
-
       quickActionButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
           const prompt = btn.getAttribute("data-prompt");
@@ -1570,14 +1354,12 @@
 
       newTopicBtn.addEventListener("click", () => {
         chatMessages.innerHTML = "";
-        const intro = "New topic started. Share your concern and I will help step by step.";
         addChatMessage({
           from: "ai",
-          type: "video",
-          content: "",
+          type: "text",
+          content: "New topic started. Share your concern and I’ll help step-by-step.",
           timestamp: new Date().toISOString(),
         });
-        speakText(intro);
       });
 
       historyBtn.addEventListener("click", () => {
@@ -1597,7 +1379,6 @@
 
       authLoginTab.addEventListener("click", () => setAuthMode("login"));
       authSignupTab.addEventListener("click", () => setAuthMode("signup"));
-      guestAccessBtn.addEventListener("click", () => enterGuestMode());
 
       authForm.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -1626,11 +1407,10 @@
           closeAuthModal();
           addChatMessage({
             from: "ai",
-            type: "video",
-            content: "",
+            type: "text",
+            content: `Welcome ${newUser.name}. Your secure local account is ready. How are you feeling today?`,
             timestamp: new Date().toISOString(),
           });
-          speakText(`Welcome ${newUser.name}. Your secure local account is ready. How are you feeling today?`);
           resetInactivityTimer();
           return;
         }
@@ -1644,11 +1424,10 @@
         closeAuthModal();
         addChatMessage({
           from: "ai",
-          type: "video",
-          content: "",
+          type: "text",
+          content: `Welcome back, ${user.name}. Let’s continue from where we left off.`,
           timestamp: new Date().toISOString(),
         });
-        speakText(`Welcome back, ${user.name}. Let us continue from where we left off.`);
         resetInactivityTimer();
       });
 
@@ -1664,8 +1443,7 @@
       });
 
       deepContentsBtn.addEventListener("click", () => {
-        const opened = trackPanel.classList.toggle("open");
-        deepContentsBtn.setAttribute("aria-expanded", opened ? "true" : "false");
+        trackPanel.classList.toggle("open");
       });
 
       trackActions.forEach((btn) => {
@@ -2265,22 +2043,9 @@
 
       // On page load, welcome user immediately
       window.addEventListener("load", () => {
-        setAuthMode("login");
         loadPillReminders();
         renderPillReminders();
-        bindActivityListeners();
-        const savedSession = JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY) || "null");
-        if (savedSession?.email && Date.now() - (savedSession.lastSeen || 0) < 15 * 60 * 1000) {
-          const users = getUsers();
-          const user = users.find((u) => u.email === savedSession.email);
-          if (user) {
-            setSession(user);
-            resetInactivityTimer();
-            welcomeUser();
-            return;
-          }
-        }
-        requireAuth();
+        welcomeUser();
       });
    })();
   </script>
