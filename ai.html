@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html class="scroll-smooth" lang="en">
  <head>
   <meta charset="utf-8"/>
@@ -684,6 +685,8 @@
       let pillReminders = [];
       let recognition = null;
       let isListening = false;
+      let lastFocusedElement = null;
+      const PILL_STORAGE_KEY = "dr-eliane-pill-reminders";
 
       function formatTime(date) {
         const d = new Date(date);
@@ -706,20 +709,17 @@
         } else if (type === "video") {
           const videoReply = document.createElement("div");
           videoReply.className = "relative w-48 h-64 rounded-lg overflow-hidden shadow-lg";
-
-          // const videoImg = document.createElement("img");
-          // videoImg.src =
-          //   "https://placehold.co/600x800/png?text=Simulated+video+reply+avatar+of+Dr+Eliane+AI+assistant+speaking+and+smiling";
-          // videoImg.alt =
-          //   "Simulated video reply avatar of Dr Eliane AI assistant speaking and smiling";
-          // videoImg.className = " object-cover w-full h-full";
+          const avatarPreview = document.createElement("img");
+          avatarPreview.src = "dr_elianee.png";
+          avatarPreview.alt = "Dr Eliane assistant speaking";
+          avatarPreview.className = "object-cover w-full h-full";
 
           const label = document.createElement("span");
           label.textContent = "Video Reply";
           label.className =
             "absolute bottom-1 left-1 bg-[#00a8cc] text-black text-xs px-2 py-0.5 rounded";
 
-          videoReply.appendChild(videoImg);
+          videoReply.appendChild(avatarPreview);
           videoReply.appendChild(label);
           messageBubble.appendChild(videoReply);
         }
@@ -772,6 +772,7 @@
 
       function closeChatPanel() {
         switchToVideoMode();
+        window.speechSynthesis?.cancel();
         userInput.value = "";
       }
 
@@ -883,6 +884,12 @@
           }
         }
         window.speechSynthesis.speak(utterance);
+      }
+
+      if (window.speechSynthesis && "onvoiceschanged" in window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          window.speechSynthesis.getVoices();
+        };
       }
 
       function startListening() {
@@ -1019,12 +1026,14 @@
       });
 
       function openDeepContentsPanel() {
+        lastFocusedElement = document.activeElement;
         if (typeof deepContentsPanel.showModal === "function") {
           deepContentsPanel.showModal();
         } else {
           deepContentsPanel.setAttribute("open", "");
         }
         deepContentsBtn.setAttribute("aria-expanded", "true");
+        deepContentsClose.focus();
       }
 
       function closeDeepContentsPanel() {
@@ -1034,7 +1043,11 @@
           deepContentsPanel.removeAttribute("open");
         }
         deepContentsBtn.setAttribute("aria-expanded", "false");
-        deepContentsBtn.focus();
+        if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+          lastFocusedElement.focus();
+        } else {
+          deepContentsBtn.focus();
+        }
       }
 
       function selectTab(tabId) {
@@ -1052,7 +1065,24 @@
         });
         const panel = document.getElementById(btn.getAttribute("aria-controls"));
         if (panel) panel.classList.remove("hidden");
-        panel.focus();
+        if (panel) panel.focus();
+      }
+
+      function savePillReminders() {
+        localStorage.setItem(PILL_STORAGE_KEY, JSON.stringify(pillReminders));
+      }
+
+      function loadPillReminders() {
+        try {
+          const stored = localStorage.getItem(PILL_STORAGE_KEY);
+          if (!stored) return;
+          const parsed = JSON.parse(stored);
+          if (!Array.isArray(parsed)) return;
+          pillReminders = parsed.filter((item) => item && item.name && item.datetime);
+        } catch (error) {
+          console.error("Failed to load reminders", error);
+          pillReminders = [];
+        }
       }
 
       function renderPillReminders() {
@@ -1096,6 +1126,7 @@
           delBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
           delBtn.addEventListener("click", () => {
             pillReminders.splice(i, 1);
+            savePillReminders();
             renderPillReminders();
           });
 
@@ -1112,8 +1143,14 @@
         const notes = pillReminderForm["pill-notes"].value.trim();
 
         if (!name || !datetime) return;
+        const selected = new Date(datetime);
+        if (Number.isNaN(selected.getTime()) || selected < new Date()) {
+          alert("Please choose a future date and time for your reminder.");
+          return;
+        }
 
         pillReminders.push({ name, datetime, notes });
+        savePillReminders();
         renderPillReminders();
 
         pillReminderForm.reset();
@@ -1121,21 +1158,111 @@
 
       tabButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
-          tabButtons.forEach((b) => {
-            b.setAttribute("aria-selected", "false");
-            b.setAttribute("tabindex", "-1");
-          });
-          btn.setAttribute("aria-selected", "true");
-          btn.setAttribute("tabindex", "0");
-
-          tabPanels.forEach((panel) => {
-            panel.classList.add("hidden");
-          });
-          const panel = document.getElementById(btn.getAttribute("aria-controls"));
-          if (panel) panel.classList.remove("hidden");
-          panel.focus();
+          selectTab(btn.id);
         });
       });
+
+      function createFacilityCard({ title, address, distanceKm, imageSrc, imageAlt, phone, website, head, fallbackText }) {
+        const div = document.createElement("div");
+        div.className = "border border-[#00a8cc] rounded-md p-4 bg-[#00a8cc]/15 shadow-sm";
+
+        const name = document.createElement("h4");
+        name.className = "font-extrabold text-[#00a8cc] text-lg";
+        name.textContent = title || fallbackText;
+
+        const addr = document.createElement("p");
+        addr.className = "text-[#a0e9ff] text-sm";
+        addr.textContent = address || "Address not specified";
+
+        const dist = document.createElement("p");
+        dist.className = "text-[#a0e9ff] text-sm";
+        dist.textContent = typeof distanceKm === "number" ? `Approx. ${distanceKm.toFixed(2)} km away` : "Distance unavailable";
+
+        const moreBtn = document.createElement("button");
+        moreBtn.className = "more-btn";
+        moreBtn.textContent = "More";
+
+        const detailsPanel = document.createElement("div");
+        detailsPanel.className = "details-panel";
+
+        const img = document.createElement("img");
+        img.src = imageSrc;
+        img.alt = imageAlt;
+        detailsPanel.appendChild(img);
+
+        if (phone) {
+          const phoneP = document.createElement("p");
+          phoneP.textContent = `Phone: ${phone}`;
+          detailsPanel.appendChild(phoneP);
+        }
+
+        if (website) {
+          const websiteA = document.createElement("a");
+          websiteA.href = website;
+          websiteA.target = "_blank";
+          websiteA.rel = "noopener noreferrer";
+          websiteA.textContent = "Website";
+          websiteA.className = "text-[#00a8cc] font-bold hover:text-[#007a9a] focus:outline-none focus:underline";
+          detailsPanel.appendChild(websiteA);
+        }
+
+        if (head) {
+          const headP = document.createElement("p");
+          headP.textContent = `Director: ${head}`;
+          detailsPanel.appendChild(headP);
+        }
+
+        div.appendChild(name);
+        div.appendChild(addr);
+        div.appendChild(dist);
+        div.appendChild(moreBtn);
+        div.appendChild(detailsPanel);
+
+        moreBtn.addEventListener("click", () => {
+          const expanded = detailsPanel.classList.toggle("visible");
+          moreBtn.textContent = expanded ? "Less" : "More";
+        });
+
+        return div;
+      }
+
+      function buildAddress(tags) {
+        let addressText = "";
+        if (tags["addr:street"]) addressText += tags["addr:street"];
+        if (tags["addr:housenumber"]) addressText += ` ${tags["addr:housenumber"]}`;
+        if (tags["addr:city"]) addressText += `${addressText ? ", " : ""}${tags["addr:city"]}`;
+        return addressText || "Address not specified";
+      }
+
+      function renderPharmaciesWithBasicInfo(pharmacies) {
+        pharmacyResults.innerHTML = "";
+        pharmacies.forEach((pharmacy) => {
+          const card = createFacilityCard({
+            title: pharmacy.tags?.name || "Pharmacy",
+            address: buildAddress(pharmacy.tags || {}),
+            distanceKm: pharmacy.distance,
+            imageSrc: "https://placehold.co/600x400/png?text=No+Image+Available",
+            imageAlt: `No image available for ${pharmacy.tags?.name || "pharmacy"}`,
+            fallbackText: "Pharmacy",
+          });
+          pharmacyResults.appendChild(card);
+        });
+      }
+
+      function renderHospitalsWithBasicInfo(hospitals) {
+        hospitalResults.innerHTML = "";
+        hospitals.forEach((hospital) => {
+          const card = createFacilityCard({
+            title: hospital.tags?.name || "Hospital",
+            address: buildAddress(hospital.tags || {}),
+            distanceKm: hospital.distance,
+            imageSrc: "dr_elianee.png",
+            imageAlt: `No image available for ${hospital.tags?.name || "hospital"}`,
+            fallbackText: "Hospital",
+          });
+          hospitalResults.appendChild(card);
+        });
+      }
 
       // Helper: distance calculation
       function distance(lat1, lon1, lat2, lon2) {
@@ -1271,87 +1398,18 @@
             const osmIdStr = pharmacy.osm_id.toString();
             const data = wikidataMap.get(osmIdStr) || {};
 
-            const div = document.createElement("div");
-            div.className = "border border-[#00a8cc] rounded-md p-4 bg-[#00a8cc]/15 shadow-sm";
-
-            const name = document.createElement("h4");
-            name.className = "font-extrabold text-[#00a8cc] text-lg";
-            name.textContent = data.label || pharmacy.tags.name || "Pharmacy";
-
-            const addr = document.createElement("p");
-            addr.className = "text-[#a0e9ff] text-sm";
-            let addressText = "";
-            if (pharmacy.tags["addr:street"]) addressText += pharmacy.tags["addr:street"];
-            if (pharmacy.tags["addr:housenumber"]) addressText += " " + pharmacy.tags["addr:housenumber"];
-            if (pharmacy.tags["addr:city"]) addressText += ", " + pharmacy.tags["addr:city"];
-            if (!addressText) addressText = "Address not specified";
-            addr.textContent = addressText;
-
-            const dist = document.createElement("p");
-            dist.className = "text-[#a0e9ff] text-sm";
-            dist.textContent = `Approx. ${pharmacy.distance.toFixed(2)} km away`;
-
-            div.appendChild(name);
-            div.appendChild(addr);
-            div.appendChild(dist);
-
-            // More info button and panel
-            const moreBtn = document.createElement("button");
-            moreBtn.className = "more-btn";
-            moreBtn.textContent = "More";
-            div.appendChild(moreBtn);
-
-            const detailsPanel = document.createElement("div");
-            detailsPanel.className = "details-panel";
-
-            if (data.image) {
-              const img = document.createElement("img");
-              img.src = data.image;
-              img.alt = `Image of ${name.textContent}`;
-              detailsPanel.appendChild(img);
-            } else {
-              // Placeholder image
-              const img = document.createElement("img");
-              img.src = "https://placehold.co/600x400/png?text=No+Image+Available";
-              img.alt = `No image available for ${name.textContent}`;
-              detailsPanel.appendChild(img);
-            }
-
-            if (data.phone) {
-              const phoneP = document.createElement("p");
-              phoneP.textContent = `Phone: ${data.phone}`;
-              detailsPanel.appendChild(phoneP);
-            }
-
-            if (data.website) {
-              const websiteA = document.createElement("a");
-              websiteA.href = data.website;
-              websiteA.target = "_blank";
-              websiteA.rel = "noopener noreferrer";
-              websiteA.textContent = "Website";
-              websiteA.className = "text-[#00a8cc] font-bold hover:text-[#007a9a] focus:outline-none focus:underline";
-              detailsPanel.appendChild(websiteA);
-            }
-
-            if (data.head) {
-              const headP = document.createElement("p");
-              headP.textContent = `Director: ${data.head}`;
-              detailsPanel.appendChild(headP);
-            }
-
-            div.appendChild(detailsPanel);
-
-            moreBtn.addEventListener("click", () => {
-              if (detailsPanel.classList.contains("visible")) {
-                detailsPanel.classList.remove("visible");
-                moreBtn.textContent = "More";
-              } else {
-                detailsPanel.classList.add("visible");
-                moreBtn.textContent = "Less";
-              }
+            const card = createFacilityCard({
+              title: data.label || pharmacy.tags.name || "Pharmacy",
+              address: buildAddress(pharmacy.tags || {}),
+              distanceKm: pharmacy.distance,
+              imageSrc: data.image || "https://placehold.co/600x400/png?text=No+Image+Available",
+              imageAlt: data.image ? `Image of ${data.label || pharmacy.tags.name || "Pharmacy"}` : `No image available for ${data.label || pharmacy.tags.name || "Pharmacy"}`,
+              phone: data.phone,
+              website: data.website,
+              head: data.head,
+              fallbackText: "Pharmacy",
             });
-
-            pharmacyResults.appendChild(div);
+            pharmacyResults.appendChild(card);
           });
         } catch (error) {
           pharmacyResults.innerHTML = `<p class="text-red-500 font-semibold">Error searching pharmacies. Please try again later.</p>`;
@@ -1472,85 +1530,18 @@
             const osmIdStr = hospital.osm_id.toString();
             const data = wikidataMap.get(osmIdStr) || {};
 
-            const div = document.createElement("div");
-            div.className = "border border-[#00a8cc] rounded-md p-4 bg-[#00a8cc]/15 shadow-sm";
-
-            const name = document.createElement("h4");
-            name.className = "font-extrabold text-[#00a8cc] text-lg";
-            name.textContent = data.label || hospital.tags.name || "Hospital";
-
-            const addr = document.createElement("p");
-            addr.className = "text-[#a0e9ff] text-sm";
-            let addressText = "";
-            if (hospital.tags["addr:street"]) addressText += hospital.tags["addr:street"];
-            if (hospital.tags["addr:housenumber"]) addressText += " " + hospital.tags["addr:housenumber"];
-            if (hospital.tags["addr:city"]) addressText += ", " + hospital.tags["addr:city"];
-            if (!addressText) addressText = "Address not specified";
-            addr.textContent = addressText;
-
-            const dist = document.createElement("p");
-            dist.className = "text-[#a0e9ff] text-sm";
-            dist.textContent = `Approx. ${hospital.distance.toFixed(2)} km away`;
-
-            div.appendChild(name);
-            div.appendChild(addr);
-            div.appendChild(dist);
-
-            const moreBtn = document.createElement("button");
-            moreBtn.className = "more-btn";
-            moreBtn.textContent = "More";
-            div.appendChild(moreBtn);
-
-            const detailsPanel = document.createElement("div");
-            detailsPanel.className = "details-panel";
-
-            if (data.image) {
-              const img = document.createElement("img");
-              img.src = data.image;
-              img.alt = `Image of ${name.textContent}`;
-              detailsPanel.appendChild(img);
-            } else {
-              const img = document.createElement("img");
-              img.src = "dr_elianee.png";
-              img.alt = `No image available for ${name.textContent}`;
-              detailsPanel.appendChild(img);
-            }
-
-            if (data.phone) {
-              const phoneP = document.createElement("p");
-              phoneP.textContent = `Phone: ${data.phone}`;
-              detailsPanel.appendChild(phoneP);
-            }
-
-            if (data.website) {
-              const websiteA = document.createElement("a");
-              websiteA.href = data.website;
-              websiteA.target = "_blank";
-              websiteA.rel = "noopener noreferrer";
-              websiteA.textContent = "Website";
-              websiteA.className = "text-[#00a8cc] font-bold hover:text-[#007a9a] focus:outline-none focus:underline";
-              detailsPanel.appendChild(websiteA);
-            }
-
-            if (data.head) {
-              const headP = document.createElement("p");
-              headP.textContent = `Director: ${data.head}`;
-              detailsPanel.appendChild(headP);
-            }
-
-            div.appendChild(detailsPanel);
-
-            moreBtn.addEventListener("click", () => {
-              if (detailsPanel.classList.contains("visible")) {
-                detailsPanel.classList.remove("visible");
-                moreBtn.textContent = "More";
-              } else {
-                detailsPanel.classList.add("visible");
-                moreBtn.textContent = "Less";
-              }
+            const card = createFacilityCard({
+              title: data.label || hospital.tags.name || "Hospital",
+              address: buildAddress(hospital.tags || {}),
+              distanceKm: hospital.distance,
+              imageSrc: data.image || "dr_elianee.png",
+              imageAlt: data.image ? `Image of ${data.label || hospital.tags.name || "Hospital"}` : `No image available for ${data.label || hospital.tags.name || "Hospital"}`,
+              phone: data.phone,
+              website: data.website,
+              head: data.head,
+              fallbackText: "Hospital",
             });
-
-            hospitalResults.appendChild(div);
+            hospitalResults.appendChild(card);
           });
         } catch (error) {
           hospitalResults.innerHTML = `<p class="text-red-500 font-semibold">Error searching hospitals. Please try again later.</p>`;
@@ -1574,6 +1565,8 @@
 
       // On page load, welcome user immediately
       window.addEventListener("load", () => {
+        loadPillReminders();
+        renderPillReminders();
         welcomeUser();
       });
    })();
